@@ -47,7 +47,7 @@
   setTimeout(function () {
     var els = document.querySelectorAll('[data-n]');
     if (!els.length || !('IntersectionObserver' in window)) return;
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduce = false; /* счётчики и строка работают и при «Уменьшить движение» на телефоне */
     function run(el) {
       var n = parseFloat(el.getAttribute('data-n')), suf = el.getAttribute('data-s') || '';
       if (reduce || isNaN(n)) { el.textContent = n + suf; return; }
@@ -64,5 +64,33 @@
       es.forEach(function (x) { if (x.isIntersecting) { run(x.target); io.unobserve(x.target); } });
     }, { threshold: 0.4 });
     els.forEach(function (el) { io.observe(el); });
+    setTimeout(function () { els.forEach(function (el) { if (el.textContent.trim().charAt(0) === '0') run(el); }); }, 7000);
   }, 150);
+
+  /* Главная: услуги — раскрытие по касанию (надёжно на телефоне) */
+  var panels = document.querySelectorAll('.acc .pn');
+  panels.forEach(function (lab) {
+    lab.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a.more')) return;
+      var id = lab.getAttribute('for'), inp = id && document.getElementById(id);
+      if (!inp) return;
+      e.preventDefault();
+      inp.checked = true;
+      if (window.matchMedia && window.matchMedia('(max-width:980px)').matches) {
+        setTimeout(function () { try { lab.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (x) {} }, 60);
+      }
+    });
+  });
+
+  /* Бегущая строка: если CSS-анимация не идёт, двигаем её скриптом */
+  var tr = document.querySelector('.tk .tr');
+  if (tr) setTimeout(function () {
+    var m1 = getComputedStyle(tr).transform;
+    setTimeout(function () {
+      if (getComputedStyle(tr).transform !== m1) return;
+      tr.style.animation = 'none';
+      var half = tr.scrollWidth / 2, x = 0, last = performance.now();
+      (function step(t) { x = (x + (t - last) * half / 60000) % half; last = t; tr.style.transform = 'translateX(' + (-x) + 'px)'; requestAnimationFrame(step); })(last);
+    }, 500);
+  }, 1500);
 })();
