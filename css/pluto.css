@@ -296,7 +296,8 @@ a.mini.k4{color:var(--iv)}.root a.mini .link{color:var(--iv)!important}
 .root .card.pc,.root .pc-ex{padding:18px}.root .card.pc .d{font-size:15px}.root .pc-h{min-height:44px}
 .root .cta2{margin:40px 20px 0;padding:22px;gap:22px}.root .cta2 h2{font-size:24px;margin:12px 0}.root .cta2 .about{font-size:14.5px}
 .root .cl a{padding:13px 0}
-.root .ft{grid-template-columns:1fr 1fr;gap:20px;padding:28px 20px}.root .ft .c:first-child{grid-column:1/-1}
+.root .ft{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;padding:28px 20px}.root .ft .c{min-width:0}.root .ft .c:first-child{grid-column:1/-1}
+.root .cxbig{font-size:36px;overflow-wrap:anywhere}
 /* главная */
 .root .pw{padding:48px 20px 0}
 .root h1{font-size:32px!important;line-height:1.08}.root h1 i{font-size:34px!important}
