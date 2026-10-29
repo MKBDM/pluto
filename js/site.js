@@ -25,7 +25,8 @@
         qbtns.forEach(function (o) { o.classList.remove('active'); o.setAttribute('aria-selected', 'false'); });
         b.classList.add('active'); b.setAttribute('aria-selected', 'true');
         if (qt) qt.textContent = b.getAttribute('data-title');
-        if (qx) qx.textContent = b.getAttribute('data-text');
+        var a = document.querySelector('[data-a="' + b.getAttribute('data-q') + '"]');
+        if (qx && a) qx.textContent = a.textContent;
       });
     });
   }
