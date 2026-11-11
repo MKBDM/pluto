@@ -26,24 +26,53 @@
 <link rel="stylesheet" href="/css/site.css">
 <link rel="stylesheet" href="/css/pluto.css">
 <style>
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 .phero h1{font-size:clamp(30px,5vw,46px)}
-.post{max-width:720px;margin:0 auto}
-.post h2{font-size:30px;margin:44px 0 14px;color:var(--iv2)}
+.postwrap{display:grid;grid-template-columns:220px minmax(0,720px);gap:56px;justify-content:center;align-items:start}
+.toc{position:sticky;top:96px}
+.toc .mono{margin-bottom:10px}
+.toc a{display:block;padding:6px 12px;border-left:2px solid var(--ln);color:var(--gr);font-size:14px;line-height:1.35;text-decoration:none}
+.toc a:hover,.toc a:focus-visible{color:var(--iv2)}
+.toc a.on{color:var(--iv2);border-left-color:var(--ac2)}
+.tocm{display:none;margin:0 0 28px;border:1px solid var(--ln);border-radius:12px;padding:12px 16px;background:var(--card)}
+.tocm summary{cursor:pointer;font-size:15px;color:var(--iv2)}
+.tocm a{display:block;padding:8px 0;color:var(--iv);font-size:16px}
+.post{max-width:720px;margin:0}
+.post h2{font-size:28px;margin:44px 0 14px;color:var(--iv2);scroll-margin-top:96px}
 .post p,.post li{font-size:18px;line-height:1.65;color:var(--iv)}
 .post p{margin:0 0 16px}
 .post ul{list-style:disc;padding-left:22px;margin:12px 0}
 .post ol{list-style:decimal;padding-left:24px;margin:12px 0}
 .post li{margin:6px 0}
 .post a{color:var(--ac2);text-decoration:underline}
-.post blockquote{margin:24px 0;padding:4px 0 4px 20px;border-left:3px solid var(--ac2)}
+.post .brief{margin:0 0 8px;padding:18px 22px;border:1px solid var(--ln);border-left:3px solid var(--ac2);border-radius:12px;background:var(--card);scroll-margin-top:96px}
+.post .brief h2{font-size:20px;margin:0 0 8px}
+.post .brief li{font-size:17px}
 .post table{width:100%;border-collapse:collapse;margin:20px 0;font-size:16px}
 .post th,.post td{border-bottom:1px solid var(--ln);padding:10px 8px;text-align:left;vertical-align:top}
+.post th{color:var(--iv2);font-weight:500}
+.post .cap{font-size:14px;color:var(--gr);margin:-8px 0 20px}
+.post .ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.post .ba div{border:1px solid var(--ln);border-radius:12px;padding:14px 16px;background:var(--card)}
+.post .ba b{display:block;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--gr);margin-bottom:6px;font-weight:500}
+.post .ba p{margin:0;font-size:16px}
+.post .quiz{margin:24px 0;padding:20px 22px;border:1px solid var(--ln);border-radius:14px;background:var(--card)}
+.post .quiz h3{margin:0 0 6px;color:var(--iv2);font-size:20px}
+.post .quiz .q{font-size:17px}
+.post .quiz button.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;font:inherit;font-size:17px;color:var(--iv);background:transparent;border:1px solid var(--ln);border-radius:10px;cursor:pointer}
+.post .quiz button.opt:hover,.post .quiz button.opt:focus-visible{border-color:var(--ac2)}
+.post .quiz button.opt[aria-pressed="true"]{border-color:var(--ac2);background:var(--card2)}
+.post .quiz .ans{margin-top:14px;padding:12px 14px;border-left:3px solid var(--ac2);font-size:16px;line-height:1.6;color:var(--iv)}
+.post .quiz .ans[hidden]{display:none}
 .post .src li{font-size:15px;color:var(--gr)}
+.post blockquote{margin:24px 0;padding:4px 0 4px 20px;border-left:3px solid var(--ac2)}
 .byline{color:var(--gr);font-size:15px;margin-top:14px}
 .byline a{color:inherit;text-decoration:underline}
 .postcta{margin-top:48px;padding:28px;border:1px solid var(--ln);border-radius:14px;background:var(--card)}
 .postcta h3{color:var(--iv2);margin:0 0 8px}
 .postnav{display:flex;justify-content:space-between;gap:16px;margin-top:32px;font-size:16px}
+@media (max-width:980px){.postwrap{display:block}.toc{display:none}.tocm{display:block}.post .ba{grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Article","headline":"«37 из 100»: почему я не пишу числа в отчётах по качественным данным","description":"Язык частоты вместо процентов на качественных данных: что считает «37 из 100», где спорят методологи и когда числа нужны.","datePublished":"2026-11-03","inLanguage":"ru","mainEntityOfPage":"https://pluto.az/blog/37-iz-100.html","image":"https://pluto.az/og-image.png","author":{"@type":"Person","name":"Мурад Кадымов","url":"https://pluto.az/about.html"},"publisher":{"@type":"Organization","name":"Pluto Digital Lab","url":"https://pluto.az/"}}
@@ -51,42 +80,117 @@
 </head>
 <body>
 <div class="root dk" lang="ru">
-<header class="pnav"><a class="logo" href="/index.html" aria-label="Pluto Digital Lab"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="1"/><path d="M17 3A14 14 0 0 0 17 31A9 14 0 0 1 17 3Z" fill="currentColor"/></svg><span><b>PLUTO</b> DIGITAL LAB</span></a><input type="checkbox" id="nvt" class="nvt" aria-label="Меню"><nav class="links" aria-label="Main"><a href="/reviews.html">Анализ отзывов</a><a href="/research.html">Исследования</a><a href="/ecommerce.html">E-commerce</a><a href="/ai.html">ИИ-автоматизация</a><a href="/cases.html">Кейсы</a><a class="cur" href="/blog.html">Блог</a><a href="/about.html">Обо мне</a><a class="m-cta" href="/contact.html">Обсудить задачу ↗</a></nav><div class="r"><span class="lang">RU</span><button class="thm" type="button" data-theme-toggle aria-label="Переключить тему: тёмная / светлая" title="Тёмная / светлая тема"><span class="knob"></span><svg class="mo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="su" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="pcta" href="/contact.html">Обсудить задачу ↗</a><label for="nvt" class="burger" aria-hidden="true"><i></i><i></i><i></i></label></div></header><section class="shell"><div class="phero"><a class="back" href="/blog.html">← Все статьи</a><p class="mono" style="color:#d9cfec;margin-top:18px">Анализ отзывов · <time datetime="2026-11-03">3 ноября 2026</time> · 5 мин чтения</p><h1>«37 из 100»: почему я не пишу числа в отчётах по качественным данным</h1><p class="lead">Язык частоты вместо процентов: что на самом деле считает строка «37 из 100», где спорят методологи и когда числа нужны.</p><p class="byline"><a href="/about.html">Мурад Кадымов</a> · Pluto Digital Lab</p></div></section><section class="wrap"><article class="post"><p>В отчёте по отзывам стоит строка: «37 из 100 упомянули доставку». Через минуту на встрече звучит: «То есть 37% клиентов недовольны доставкой». Это три разных утверждения, и ни одно не следует из исходной строки. Речь шла об авторах отзывов, а не о клиентах. «Упомянули» не значит «недовольны». А сто отзывов не выборка из клиентской базы.</p>
-<h2>Что на самом деле считает «37 из 100»</h2>
-<p><strong>Авторов отзывов, а не клиентов.</strong> Hu, Pavlou и Zhang описывают два самоотбора: покупают в основном те, кому товар заранее нравится (смещение приобретения), а отзывы чаще пишут те, у кого впечатление крайнее, хорошее или плохое (смещение недоотчётности). Отсюда J-образное распределение оценок. В их эксперименте, где отзыв оставляли все участники, распределение получилось близким к нормальному.</p>
-<p><strong>Решения кодировщика.</strong> Тема не лежит в данных готовым объектом. Braun и Clarke описывают темы как созданные исследователем из кодов, а не найденные в данных готовыми. Граница между «доставкой» и «работой курьера» проходит там, где её проведёт кодировщик. Сдвинули границу, и число изменилось.</p>
-<p><strong>Упоминание, а не мнение.</strong> Отзыв, где доставка названа мимоходом, и отзыв, где из-за неё отказались от повторной покупки, дают в таблице одну единицу.</p>
-<h2>Что говорит методология и где она спорит сама с собой</h2>
-<p>Первая позиция: считайте. Sandelowski (2001) доказывает, что числа неотъемлемы от качественной работы: они помогают описывать выборку и проверять интерпретации. Maxwell (2010) напоминает, что Becker и Hammersley поддерживали «квазистатистику»: простые подсчёты, которые делают слова «некоторые», «обычно» и «большинство» точнее. При этом Sandelowski называет ловушки: размытый словесный счёт, избыток цифр, подсчёт без контекста.</p>
-<p>Вторая позиция: осторожно. Maxwell перечисляет риски: излишнее обобщение, сведение доказательств к количеству и риторическое использование цифр. Raluca Budiu из NN/g пишет, что если 4 из 5 участников сделали что-то, нельзя заключать, что так сделают 80% всех пользователей. Braun и Clarke в 2016 году возражали против инструмента расчёта выборки, в котором значимость темы выводится из её частоты.</p>
-<p>Моя практика осторожнее первой позиции: в отчётах по качественным данным я по умолчанию пишу язык частоты, а не проценты и не «X из N».</p>
-<h2>Почему по умолчанию не пишу ни процентов, ни «X из N»</h2>
+<header class="pnav"><a class="logo" href="/index.html" aria-label="Pluto Digital Lab"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="1"/><path d="M17 3A14 14 0 0 0 17 31A9 14 0 0 1 17 3Z" fill="currentColor"/></svg><span><b>PLUTO</b> DIGITAL LAB</span></a><input type="checkbox" id="nvt" class="nvt" aria-label="Меню"><nav class="links" aria-label="Main"><a href="/reviews.html">Анализ отзывов</a><a href="/research.html">Исследования</a><a href="/ecommerce.html">E-commerce</a><a href="/ai.html">ИИ-автоматизация</a><a href="/cases.html">Кейсы</a><a class="cur" href="/blog.html">Блог</a><a href="/about.html">Обо мне</a><a class="m-cta" href="/contact.html">Обсудить задачу ↗</a></nav><div class="r"><span class="lang">RU</span><button class="thm" type="button" data-theme-toggle aria-label="Переключить тему: тёмная / светлая" title="Тёмная / светлая тема"><span class="knob"></span><svg class="mo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="su" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="pcta" href="/contact.html">Обсудить задачу ↗</a><label for="nvt" class="burger" aria-hidden="true"><i></i><i></i><i></i></label></div></header><section class="shell"><div class="phero"><a class="back" href="/blog.html">← Все статьи</a><p class="mono" style="color:#d9cfec;margin-top:18px">Анализ отзывов · <time datetime="2026-11-03">3 ноября 2026</time> · 4 мин чтения</p><h1>«37 из 100»: почему я не пишу числа в отчётах по качественным данным</h1><p class="lead">Для тех, кто пишет и читает отчёты по отзывам и интервью: что на самом деле значит строка «37 из 100», где спорят методологи и чем её заменить.</p><p class="byline"><a href="/about.html">Мурад Кадымов</a> · Pluto Digital Lab</p></div></section><section class="wrap"><details class="tocm"><summary>Содержание</summary><a href="#brief">Коротко</a><a href="#three">Одна строка, три утверждения</a><a href="#who">Кого описывают отзывы</a><a href="#coder">Почему число зависит от кодировщика</a><a href="#debate">Где методологи расходятся</a><a href="#check">Проверьте себя</a><a href="#instead">Что писать вместо чисел</a><a href="#when">Когда числа нужны</a><a href="#process">Как это закреплено в процессе</a><a href="#list">Чек-лист для вашего отчёта</a><a href="#src">Источники</a></details><div class="postwrap"><aside class="toc" aria-label="Содержание"><p class="mono">Содержание</p><nav><a href="#brief">Коротко</a><a href="#three">Одна строка, три утверждения</a><a href="#who">Кого описывают отзывы</a><a href="#coder">Почему число зависит от кодировщика</a><a href="#debate">Где методологи расходятся</a><a href="#check">Проверьте себя</a><a href="#instead">Что писать вместо чисел</a><a href="#when">Когда числа нужны</a><a href="#process">Как это закреплено в процессе</a><a href="#list">Чек-лист для вашего отчёта</a><a href="#src">Источники</a></nav></aside><article class="post">
+<div class="brief" id="brief"><h2>Коротко</h2><ul>
+<li>«37 из 100» описывает <strong>авторов отзывов и решения кодировщика</strong>, а не долю клиентов.</li>
+<li>На качественных данных я по умолчанию пишу <strong>язык частоты, цитаты и кто говорил</strong>.</li>
+<li>Число допустимо, если рядом указаны метод и размер выборки.</li>
+</ul></div>
+
+<h2 id="three">Одна строка, три утверждения</h2>
+<p>В отчёте по отзывам стоит строка «37 из 100 упомянули доставку». Через минуту на встрече звучит другая: «37% клиентов недовольны доставкой». Между ними три разрыва.</p>
+<table><thead><tr><th>В отчёте</th><th>Как услышали</th><th>Почему не следует</th></tr></thead><tbody>
+<tr><td>Авторы отзывов</td><td>Клиенты</td><td>Сто отзывов не выборка из клиентской базы</td></tr>
+<tr><td>Упомянули</td><td>Недовольны</td><td>Упоминание не равно жалобе</td></tr>
+<tr><td>37 из 100</td><td>37%</td><td>«X из N» читатель превращает в процент сам</td></tr>
+</tbody></table>
+
+<h2 id="who">Кого описывают отзывы</h2>
+<p>Hu, Pavlou и Zhang описывают два самоотбора. Первый: покупают в основном те, кому товар заранее нравится (смещение приобретения). Второй: отзывы чаще пишут те, у кого впечатление крайнее, хорошее или плохое (смещение недоотчётности). Отсюда J-образное распределение оценок.</p>
+<p>В их эксперименте отзыв оставляли все участники, и распределение получилось близким к нормальному. <strong>Вывод: отзывы показывают, о чём говорят пишущие, а не как часто это встречается у всех клиентов.</strong></p>
+
+<h2 id="coder">Почему число зависит от кодировщика</h2>
+<p>Braun и Clarke описывают темы как созданные исследователем из кодов, а не найденные в данных готовыми. Граница между «доставкой» и «работой курьера» проходит там, где её проведёт кодировщик. Сдвинули границу, и число изменилось.</p>
+<p>Есть и вторая проблема. Отзыв, где доставка названа мимоходом, и отзыв, где из-за неё отказались от повторной покупки, дают в таблице <strong>одну единицу</strong>.</p>
+
+<h2 id="debate">Где методологи расходятся</h2>
+<table><thead><tr><th>Позиция</th><th>Аргумент</th><th>Источник</th></tr></thead><tbody>
+<tr><td><strong>Считайте</strong></td><td>Числа неотъемлемы от качественной работы: помогают описывать выборку и проверять интерпретации</td><td>Sandelowski (2001)</td></tr>
+<tr><td><strong>Считайте</strong></td><td>«Квазистатистика»: простые подсчёты делают слова «некоторые», «обычно», «большинство» точнее</td><td>Maxwell (2010), со ссылкой на Becker и Hammersley</td></tr>
+<tr><td><strong>Осторожно</strong></td><td>Риски: излишнее обобщение, сведение доказательств к количеству, риторическое использование цифр</td><td>Maxwell (2010)</td></tr>
+<tr><td><strong>Осторожно</strong></td><td>4 из 5 участников не дают права говорить, что так сделают 80% пользователей</td><td>Budiu, NN/g</td></tr>
+<tr><td><strong>Осторожно</strong></td><td>Возражение против инструмента расчёта выборки, где значимость темы выводится из её частоты</td><td>Braun и Clarke (2016)</td></tr>
+</tbody></table>
+<p class="cap">Sandelowski при этом называет ловушки подсчёта: размытый словесный счёт, избыток цифр, цифры без контекста.</p>
+<p><strong>Моя практика осторожнее первой позиции:</strong> в отчётах по качественным данным я по умолчанию пишу язык частоты, а не проценты и не «X из N». Это рабочее правило, а не вывод из источников: они допускают подсчёт при понятном контексте.</p>
+
+<h2 id="check">Проверьте себя</h2>
+<div class="quiz" id="quiz"><h3>Как записать результат пяти интервью?</h3>
+<p class="q">В пяти интервью четыре участника не нашли кнопку. Какую формулировку вы допустите в отчёте? Выберите вариант, и я покажу, как его прочитает заказчик.</p>
+<div role="group" aria-label="Варианты формулировки">
+<button type="button" class="opt" data-k="a" aria-pressed="false">«4 из 5 участников не нашли кнопку»</button>
+<button type="button" class="opt" data-k="b" aria-pressed="false">«80% участников не нашли кнопку»</button>
+<button type="button" class="opt" data-k="c" aria-pressed="false">«Большинство участников не нашли кнопку»</button>
+</div>
+<div class="ans" id="ans" role="status" aria-live="polite" hidden></div>
+</div>
+<p>Единственно верного ответа здесь нет: допустимость зависит от вашей практики и заказчика. Важно, что вы знаете, как каждый вариант прочитают.</p>
+
+<h2 id="instead">Что писать вместо чисел</h2>
+<div class="ba"><div><b>До</b><p>«37 из 100 упомянули доставку».</p></div><div><b>После</b><p>«Доставку упоминают несколько авторов отзывов. Часть из них связывает её с отказом от повторной покупки» + цитата с указанием канала и стадии пути.</p></div></div>
+<p class="cap">Пример формулировки, не данные проекта.</p>
 <ul>
-<li><strong>«X из N» читатель превращает в процент сам.</strong> Именно об этом предупреждает пример NN/g.</li>
-<li><strong>Цифра отрывается от оговорок.</strong> В слайде остаётся «37», а оговорка про самоотбор остаётся в приложении. Sandelowski называет это подсчётом без контекста.</li>
-<li><strong>Частота и важность не одно и то же.</strong> Тема, которую назвали несколько человек, может решать судьбу продукта, а тема с большим числом упоминаний может быть шумом.</li>
-<li><strong>Что вместо чисел.</strong> Язык частоты («большинство», «несколько», «единичные»), цитаты и указание, кто именно говорил: сегмент, канал, стадия пути.</li>
+<li><strong>Язык частоты:</strong> «большинство», «несколько», «единичные». Договоритесь с командой, что за каким словом стоит, иначе получится размытый счёт.</li>
+<li><strong>Цитаты</strong> показывают, как именно это звучит.</li>
+<li><strong>Кто говорил:</strong> сегмент, канал, стадия пути. Тема из нескольких голосов может решать судьбу продукта, а тема с большим числом упоминаний может быть шумом.</li>
 </ul>
-<h2>Когда числа нужны</h2>
-<p>На количественных данных: закрытый опрос, поведенческая аналитика. Проценты там допустимы, но с указанием размера выборки и метода. Формат определяют данные, а не пожелание заказчика. Если заказчик просит «X из N» по интервью, это разговор на этапе приёма заявки, а не согласование формата.</p>
-<p>На качественных данных исключения возможны, но это осознанное решение, а не привычка: число должно стоять рядом с методом, размером выборки и оговоркой о самоотборе, и не вытеснять цитаты и язык частоты.</p>
-<h2>Как это закреплено в процессе</h2>
-<p>В моём конвейере исследований с ИИ-агентами это правило не оставлено на усмотрение исполнителя. Оно записано в правила проекта, а скрипт проверки презентаций останавливает выпуск, если находит процент или «X из N» вне цитаты и без пометки о количественных данных и размере выборки.</p>
-<h2>Что делать</h2>
+
+<h2 id="when">Когда числа нужны</h2>
+<p>На количественных данных: закрытый опрос, поведенческая аналитика. Проценты там допустимы, но с размером выборки и методом. Формат определяют данные, а не пожелание заказчика. Если заказчик просит «X из N» по интервью, это разговор на этапе приёма заявки.</p>
+<p>На качественных данных число возможно как осознанное исключение: рядом с методом, размером выборки и оговоркой о самоотборе, и без вытеснения цитат.</p>
+
+<h2 id="process">Как это закреплено в процессе</h2>
+<p>В моём конвейере исследований с ИИ-агентами правило не оставлено на усмотрение исполнителя. Оно записано в правила проекта, а скрипт проверки презентаций останавливает выпуск, если находит процент или «X из N» вне цитаты и без пометки о количественных данных и размере выборки.</p>
+
+<h2 id="list">Чек-лист для вашего отчёта</h2>
 <ol>
 <li>Определите тип данных до анализа, а не после.</li>
 <li>На качественных данных пишите язык частоты, цитаты и кто говорил.</li>
-<li>Числа только с методом и размером выборки.</li>
-<li>Отзывы читайте как сигнал, а не как оценку распространённости проблемы.</li>
+<li>Числа давайте только с методом и размером выборки.</li>
+<li>Читайте отзывы как сигнал, а не как оценку распространённости проблемы.</li>
 </ol>
-<p>Для коллег вопрос: допускаете ли вы «X из N» в отчётах по интервью и где проходит ваша граница?</p><h2>Источники</h2><ul class="src"><li><a href="https://ink.library.smu.edu.sg/sis_research/8012" target="_blank" rel="noopener">Hu N., Pavlou P., Zhang J. (2017). On self-selection biases in online product reviews. MIS Quarterly, 41(2), 449–472</a></li>
+<p>Для коллег вопрос: допускаете ли вы «X из N» в отчётах по интервью и где проходит ваша граница?</p>
+
+<h2 id="src">Источники</h2><ul class="src"><li><a href="https://ink.library.smu.edu.sg/sis_research/8012" target="_blank" rel="noopener">Hu N., Pavlou P., Zhang J. (2017). On self-selection biases in online product reviews. MIS Quarterly, 41(2), 449–472</a></li>
 <li><a href="https://pubmed.ncbi.nlm.nih.gov/11526621/" target="_blank" rel="noopener">Sandelowski M. (2001). Real qualitative researchers do not count: the use of numbers in qualitative research. Research in Nursing &amp; Health, 24(3), 230–240</a></li>
 <li><a href="https://doi.org/10.1177/1077800410364740" target="_blank" rel="noopener">Maxwell J. A. (2010). Using numbers in qualitative research. Qualitative Inquiry, 16(6), 475–482</a></li>
 <li><a href="https://doi.org/10.1080/13645579.2016.1195588" target="_blank" rel="noopener">Braun V., Clarke V. (2016). (Mis)conceptualising themes, thematic analysis, and other problems with Fugard and Potts’ (2015) sample-size tool for thematic analysis. International Journal of Social Research Methodology, 19(6), 739–743</a></li>
-<li><a href="https://www.nngroup.com/videos/numbers-small-ux-studies/" target="_blank" rel="noopener">Budiu R. Don’t report numbers from small UX studies. Nielsen Norman Group</a></li></ul><div class="postcta"><h3>Есть отзывы, с которыми не знаете, что делать?</h3><p>Оценка данных бесплатна: посмотрю, что в них можно найти. Принимаю материалы на русском, азербайджанском и английском.</p><a class="btn red" href="/reviews.html">Обсудить разбор отзывов ↗</a></div><p class="postnav"><a href="/blog.html">← Все статьи</a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">Обсудить в LinkedIn ↗</a></p></article></section>
+<li><a href="https://www.nngroup.com/videos/numbers-small-ux-studies/" target="_blank" rel="noopener">Budiu R. Don’t report numbers from small UX studies. Nielsen Norman Group</a></li></ul>
+<div class="postcta"><h3>Есть отзывы, с которыми не знаете, что делать?</h3><p>Оценка данных бесплатна: посмотрю, что в них можно найти. Принимаю материалы на русском, азербайджанском и английском.</p><a class="btn red" href="/reviews.html">Обсудить разбор отзывов ↗</a></div>
+<p class="postnav"><a href="/blog.html">← Все статьи</a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">Обсудить в LinkedIn ↗</a></p>
+</article></div></section>
 <section class="cta2"><div><p class="mono" style="color:#e3d6ff">Контакты</p><h2>Какое решение вам нужно принять?</h2><p class="about">Расскажите, что происходит в продукте или бизнесе. На бесплатном 30-минутном созвоне обсудим, с чего начать.</p><a class="btn red" href="/contact.html">Обсудить задачу ↗</a></div><div><p class="mono" style="color:#e3d6ff;margin-bottom:10px">Или напишите напрямую</p><div class="cl"><a href="https://t.me/mkbdm" target="_blank" rel="noopener">Telegram <span>↗</span></a><a href="https://wa.me/994504212641" target="_blank" rel="noopener">WhatsApp <span>↗</span></a><a href="mailto:muradkadimov@pluto.az">Email <span>↗</span></a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">LinkedIn <span>↗</span></a></div></div></section><footer class="ft"><div class="c"><b>PLUTO DIGITAL LAB</b><span>Независимая практика</span><span style="margin-top:14px">© 2026 Pluto Digital Lab · <a href="/privacy.html" style="text-decoration:underline">Политика конфиденциальности</a></span></div><div class="c"><span class="h">Разделы</span><a href="/reviews.html">Анализ отзывов</a><a href="/research.html">Исследования</a><a href="/ecommerce.html">E-commerce</a><a href="/ai.html">ИИ-автоматизация</a><a href="/cases.html">Кейсы</a><a href="/blog.html">Блог</a><a href="/about.html">Обо мне</a></div><div class="c"><span class="h">Связь</span><a href="https://t.me/mkbdm" target="_blank" rel="noopener">Telegram</a><a href="https://wa.me/994504212641" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:muradkadimov@pluto.az">muradkadimov@pluto.az</a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">LinkedIn</a></div></footer>
 </div>
 <script src="/js/site.js"></script>
 <script src="/js/consent.js"></script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  var ids=Object.keys(map);
+  function mark(id){links.forEach(function(a){a.classList.remove('on');a.removeAttribute('aria-current');});if(map[id]){map[id].classList.add('on');map[id].setAttribute('aria-current','true');}}
+  if('IntersectionObserver' in window){
+    var seen={};
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){seen[e.target.id]=e.isIntersecting;});
+      for(var i=0;i<ids.length;i++){if(seen[ids[i]]){mark(ids[i]);return;}}
+    },{rootMargin:'-15% 0px -70% 0px'});
+    ids.forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});
+  }
+  mark(ids[0]);
+  var tm=document.querySelector('.tocm');
+  if(tm){[].slice.call(tm.querySelectorAll('a')).forEach(function(a){a.addEventListener('click',function(){tm.open=false;});});}
+  var texts={
+    a:'Заказчик прочтёт это как ровно 4 из 5 участников теста. Это честно по числу, но «4 из 5» быстро превращается в «80% пользователей». Именно об этом предупреждает Budiu из NN/g. Если пишете так, добавьте, что это пять интервью и вывод не распространяется на всех.',
+    b:'Процент на пяти участниках создаёт ложную точность: один человек меняет значение на 20 пунктов. По Budiu из NN/g, из таких данных нельзя заключать, что так сделают 80% всех пользователей. Для интервью я такой формат не использую.',
+    c:'Это мой вариант по умолчанию: он не обещает точности, которой нет. Его слабое место в том, что слово размыто. Поэтому рядом нужны цитаты и договорённость, что значит «большинство» в ваших отчётах (Sandelowski называет размытый словесный счёт ловушкой).'
+  };
+  var box=document.getElementById('ans');
+  var btns=[].slice.call(document.querySelectorAll('#quiz .opt'));
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    box.textContent=texts[b.getAttribute('data-k')];box.hidden=false;
+  });});
+})();
+</script>
 </body>
 </html>

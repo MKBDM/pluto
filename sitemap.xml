@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pluto.az/</loc></url>
-  <url><loc>https://pluto.az/about.html</loc></url>
-  <url><loc>https://pluto.az/ai.html</loc></url>
-  <url><loc>https://pluto.az/birmarket.html</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://pluto.az/</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/"/></url>
+  <url><loc>https://pluto.az/about.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/about.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/about.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/about.html"/></url>
+  <url><loc>https://pluto.az/ai.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/ai.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/ai.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/ai.html"/></url>
+  <url><loc>https://pluto.az/birmarket.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/birmarket.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/birmarket.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/birmarket.html"/></url>
   <url><loc>https://pluto.az/blog.html</loc></url>
   <url><loc>https://pluto.az/blog/37-iz-100.html</loc></url>
+  <url><loc>https://pluto.az/blog/etsy-iz-azerbaidzhana.html</loc></url>
+  <url><loc>https://pluto.az/blog/prodazhi-na-marketplejse.html</loc></url>
+  <url><loc>https://pluto.az/blog/start-na-birmarket.html</loc></url>
   <url><loc>https://pluto.az/case-credit.html</loc></url>
   <url><loc>https://pluto.az/case-first-order.html</loc></url>
   <url><loc>https://pluto.az/case-fmcg.html</loc></url>
   <url><loc>https://pluto.az/case-partner.html</loc></url>
   <url><loc>https://pluto.az/case-returns.html</loc></url>
   <url><loc>https://pluto.az/cases.html</loc></url>
-  <url><loc>https://pluto.az/cjms.html</loc></url>
-  <url><loc>https://pluto.az/contact.html</loc></url>
-  <url><loc>https://pluto.az/ecommerce.html</loc></url>
-  <url><loc>https://pluto.az/etsy.html</loc></url>
-  <url><loc>https://pluto.az/privacy.html</loc></url>
-  <url><loc>https://pluto.az/product-cards.html</loc></url>
-  <url><loc>https://pluto.az/research-os.html</loc></url>
-  <url><loc>https://pluto.az/research.html</loc></url>
+  <url><loc>https://pluto.az/cjms.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/cjms.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/cjms.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/cjms.html"/></url>
+  <url><loc>https://pluto.az/contact.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/contact.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/contact.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/contact.html"/></url>
+  <url><loc>https://pluto.az/ecommerce.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/ecommerce.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/ecommerce.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/ecommerce.html"/></url>
+  <url><loc>https://pluto.az/etsy.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/etsy.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/etsy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/etsy.html"/></url>
+  <url><loc>https://pluto.az/privacy.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/privacy.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/privacy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/privacy.html"/></url>
+  <url><loc>https://pluto.az/product-cards.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/product-cards.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/product-cards.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/product-cards.html"/></url>
+  <url><loc>https://pluto.az/research-os.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/research-os.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/research-os.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/research-os.html"/></url>
+  <url><loc>https://pluto.az/research.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/research.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/research.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/research.html"/></url>
   <url><loc>https://pluto.az/reviews.html</loc></url>
+  <url><loc>https://pluto.az/az/</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/"/></url>
+  <url><loc>https://pluto.az/az/research.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/research.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/research.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/research.html"/></url>
+  <url><loc>https://pluto.az/az/cjms.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/cjms.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/cjms.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/cjms.html"/></url>
+  <url><loc>https://pluto.az/az/ecommerce.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/ecommerce.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/ecommerce.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/ecommerce.html"/></url>
+  <url><loc>https://pluto.az/az/etsy.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/etsy.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/etsy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/etsy.html"/></url>
+  <url><loc>https://pluto.az/az/birmarket.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/birmarket.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/birmarket.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/birmarket.html"/></url>
+  <url><loc>https://pluto.az/az/product-cards.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/product-cards.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/product-cards.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/product-cards.html"/></url>
+  <url><loc>https://pluto.az/az/about.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/about.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/about.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/about.html"/></url>
+  <url><loc>https://pluto.az/az/privacy.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/privacy.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/privacy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/privacy.html"/></url>
+  <url><loc>https://pluto.az/az/ai.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/ai.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/ai.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/ai.html"/></url>
+  <url><loc>https://pluto.az/az/research-os.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/research-os.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/research-os.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/research-os.html"/></url>
+  <url><loc>https://pluto.az/az/contact.html</loc><xhtml:link rel="alternate" hreflang="ru" href="https://pluto.az/contact.html"/><xhtml:link rel="alternate" hreflang="az" href="https://pluto.az/az/contact.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://pluto.az/contact.html"/></url>
 </urlset>
