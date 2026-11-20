@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>За сколько продавать на Etsy</title>
+<style>
+:root{--fg:#17202a;--mut:#667085;--line:#e4e7ec;--card:#f6f7f9;--g:#127a43;--gb:#e7f6ec;--y:#9a5b00;--yb:#fff4dc;--r:#b42318;--rb:#fdecea;--acc:#1f5fbf}
+*{box-sizing:border-box}body{font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--fg);margin:auto;padding:20px;max-width:780px}
+h1{font-size:22px;margin:0 0 2px}.sub{color:var(--mut);font-size:13.5px;margin-bottom:18px}
+h2{font-size:15px;margin:22px 0 8px}h2 span{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--fg);color:#fff;font-size:12px;text-align:center;line-height:22px;margin-right:6px}
+.in{display:grid;grid-template-columns:1fr 1.6fr;gap:12px}@media(max-width:560px){.in{grid-template-columns:1fr}}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}input,select{width:100%;padding:10px;border:1px solid #cfd4dc;border-radius:8px;font:inherit;background:#fff}
+#loc{font-size:20px;font-weight:600}
+.ans{border-radius:12px;padding:16px 18px}.ans.g{background:var(--gb)}.ans.y{background:var(--yb)}.ans.r{background:var(--rb)}
+.ans .tag{font-size:12.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}.g .tag{color:var(--g)}.y .tag{color:var(--y)}.r .tag{color:var(--r)}
+.ans .big{font-size:40px;font-weight:700;line-height:1.15;margin:4px 0}.ans .big small{font-size:15px;font-weight:400;color:var(--mut)}
+.ans p{margin:6px 0 0;font-size:14.5px}
+.cmp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}.cmp div{background:var(--card);border-radius:10px;padding:10px 12px}.cmp .l{font-size:12px;color:var(--mut)}.cmp .v{font-size:20px;font-weight:600}
+.scale{position:relative;height:118px;margin:6px 4px 0}
+.track{position:absolute;left:0;right:0;top:52px;height:14px;background:#eceef2;border-radius:7px}
+.zone{position:absolute;top:52px;height:14px;background:#9fc5f8;border-radius:7px}
+.medt{position:absolute;top:48px;width:2px;height:22px;background:var(--acc)}
+.mk{position:absolute;transform:translateX(-50%);text-align:center;font-size:12px;white-space:nowrap}
+.mk i{display:block;width:2px;height:16px;margin:auto}.mk.up{top:0}.mk.dn{top:70px}.mk b{font-size:13px}
+.leg{font-size:12.5px;color:var(--mut);margin-top:2px}.leg em{display:inline-block;width:12px;height:12px;border-radius:3px;background:#9fc5f8;vertical-align:-1px;margin-right:4px;font-style:normal}
+.bar{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:8px 0}.bar div{height:100%}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:5px 0;border-bottom:1px solid var(--line)}td:last-child{text-align:right;white-space:nowrap}#all td{text-align:right;padding:5px 6px;font-size:13px}td i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px}
+tr.t td{font-weight:700;border-bottom:none}
+ul{margin:6px 0 0;padding-left:20px;font-size:14.5px}li{margin-bottom:4px}
+.note{font-size:13px;color:var(--y);background:var(--yb);border-radius:8px;padding:8px 10px;margin-top:8px}
+details{margin-top:14px;font-size:13.5px;border:1px solid var(--line);border-radius:10px;padding:10px 12px}summary{cursor:pointer;font-weight:600}
+.set{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:10px}
+.mut{color:var(--mut)}
+</style></head><body>
+<h1>За сколько продавать на Etsy</h1>
+<div class="sub">Введите цену, по которой продаёте дома, и выберите товар. Калькулятор сам учтёт комиссии Etsy, Payoneer, Pluto, пошлину США и доставку.</div>
+
+<h2><span>1</span>Ваш товар</h2>
+<div class="in">
+<div><label>Цена дома, $</label><input id="loc" type="number" min="0" value="40"></div>
+<div><label>Что продаёте</label><select id="cat"></select></div>
+</div>
+
+<h2><span>2</span>Ответ</h2>
+<div class="ans" id="ans"></div>
+<div class="cmp" id="cmp"></div>
+
+<h2><span>3</span>Где вы на рынке</h2>
+<div class="mut" style="font-size:13.5px">Шкала показывает, сколько покупатель платит всего: товар + доставка.</div>
+<div class="scale" id="scale"></div>
+<div class="leg" id="leg"></div>
+<div id="warn"></div>
+
+<h2><span>4</span>Куда уходят деньги покупателя</h2>
+<div class="bar" id="bar"></div>
+<table id="tb"></table>
+
+<h2><span>5</span>Что можно изменить</h2>
+<ul id="tips"></ul>
+
+<details><summary>Настройки расчёта</summary>
+<div class="set">
+<div><label>Тейкрейт Pluto</label><select id="pl"><option value="20">20%</option><option value="10">10%</option></select></div>
+<div><label>Магазин на Etsy</label><select id="st"><option value="5">Новый, без отзывов</option><option value="6">Есть 10+ отзывов</option><option value="7">Товар заметно выделяется</option></select></div>
+<div><label>Доставка, которую платит покупатель, $</label><input id="S" type="number" min="0" value="25"></div>
+</div>
+<div class="mut" style="margin-top:8px">Новый магазин ставит цену чуть ниже середины рынка (40% конкурентов дешевле), магазин с отзывами — на середине, выделяющийся товар — чуть выше. Доставка: считаем, что покупатель оплачивает ровно столько, сколько стоит отправка.</div>
+</details>
+<details><summary>Все товары сразу: кому Etsy выгоден</summary>
+<div class="mut" style="margin:8px 0">Для каждого товара — рынок с доставкой и предельная цена дома при текущих настройках. «Выгодно» — на Etsy заработаете больше, чем дома. «Предел» — дороже этой цены дома товар на Etsy не впишется в рынок.</div>
+<div style="overflow-x:auto"><table id="all"></table></div></details>
+<details><summary>Как это посчитано и откуда данные</summary><div class="mut" style="margin-top:8px;line-height:1.55">
+<b>Минимальная цена</b> — цена на Etsy, при которой вы получаете на руки ровно столько же, сколько дома. <b>Рыночная цена</b> — цена, при которой ваш итог для покупателя (товар + доставка) равен рыночному итогу. <b>Рекомендуемая</b> — большая из двух, округление вверх до .90.<br><br>
+<b>Комиссии Etsy</b> (продавец из Грузии, USD): листинг $0,20; продажа 6,5% и обработка платежа 6,5% + $0,30 — обе от суммы «товар + доставка». Источник: etsy.com/legal/fees. <b>Payoneer</b> 2% и вывод 1% от выплаты Etsy — ставки заданы владельцем, по тарифам Payoneer не проверены. <b>Тейкрейт Pluto</b> — от выплаты после Etsy, Payoneer и вывода, за вычетом стоимости отправки. Налог покупателя и реклама не учтены.<br><br>
+<b>Пошлина США</b>: базовая ставка (General) из hts.usitc.gov по коду категории, от цены товара без доставки (так таможенную стоимость описывает Etsy). Дополнительных тарифов для товаров из Азербайджана на 14.11.2026 не найдено. Коды подобраны по названиям категорий и не подтверждены брокером.<br><br>
+<b>Рынок</b> — это итог для покупателя: текущая цена листинга на странице Etsy плюс доставка в США (индекс 10001), снято 14.11.2026. 30 категорий: листинги из среза Etsy Open API 06.11.2026 (один запрос на категорию, 100 листингов), отобраны сопоставимые (USD, физический товар, не материалы, не винтаж, название по теме) и из них «подтверждённые»: старше 30 дней, просмотров в день и доли «в избранное» не ниже медианы; по каждому открыта страница, 5–20 листингов на категорию. Цена — минимальная вариация листинга с учётом действующей скидки; у большинства листингов сейчас скидка, поэтому рынок ниже, чем по ценам без скидок.<br>
+<b>Чокеры и браслеты из камней</b>: цены 72 листингов из поиска Etsy (14.11.2026) плюс медиана доставки по 14–15 открытым листингам. Для браслетов эти 15 листингов заметно дешевле общей выборки, оценка грубая.<br>
+<b>Керамика, свечи и мыло</b> (добавлены 15.11.2026): по 100 листингов на товар из поиска Etsy (первые 3–4 страницы выдачи, включая рекламные листинги, отбор по названию), по каждому открыта страница: текущая цена и доставка в США. Отбора «подтверждённых» по просмотрам здесь нет. Около двух третей этих листингов отправляются не из США.<br>
+<b>Чего нет:</b> продаж по листингу Etsy не отдаёт; выборки малые; сезонные скидки могут закончиться.</div></details>
+<script>
+var CATS=[["Кожаная обложка для блокнота / тревел-джорнал","Кожа",34.53,45.01,77.45,41.8,45.01,52.01,"4820.10.20",0,10,4,4.89,"page",6],["Кожаный несессер (dopp kit)","Кожа",18,24.38,29.65,23.95,24.38,24.5,"4202.91.90",4.5,14,3,5.45,"page",14],["Кожаный ремень для гитары","Кожа",36.3,40.38,42.06,38.7,40.38,41.88,"9209.99.80",5.3,10,5,2.9,"page",8],["Кожаный ремень для камеры","Кожа",28.4,32.2,52.13,28.4,32.2,36,"4205.00.80",0,6,3,3,"page",5],["Кожаный ремень (пояс) с гравировкой","Кожа",24.96,29.57,51.24,27.92,29.57,29.9,"4203.30.00",2.7,14,11,0,"page",10],["Кожаный кошелёк с гравировкой","Кожа",19.5,24.31,28.98,23.25,24.31,27.24,"4202.31.60",8,9,4,2.98,"page",8],["Кожаный портфель-папка (padfolio)","Кожа",42.33,47.5,57.86,46.08,47.5,53.4,"4202.11.00",8,15,8,0,"page",15],["Кожаный поднос-органайзер (valet tray)","Кожа",23.98,33.91,46.65,30.63,33.91,34.99,"4205.00.80",0,20,4,5.97,"page",15],["Именной кожаный блокнот (journal)","Кожа",19.76,31.98,51.99,24,31.98,39.95,"4820.10.20",0,6,4,0,"page",4],["Кожаный ремешок для часов","Кожа",39.11,40.32,40.48,40.32,40.32,40.32,"9113.90.80",1.8,14,3,5.55,"page",13],["Именной кожаный ошейник","Кожа",18.9,19.31,28.43,18.98,19.31,26.26,"4201.00.30",2.4,9,6,0,"page",8],["Именная кожаная сумка-тоут","Кожа",63.75,98.4,114.99,93.83,98.4,110.76,"4202.21.90",9,9,7,0,"page",8],["Кожаная сумка через плечо","Кожа",67.75,104.22,122.02,96.89,104.22,108.91,"4202.21.90",9,7,5,0,"page",6],["Кожаная сумка-мессенджер","Кожа",80.63,89.25,152.4,89.25,89.25,94.98,"4202.21.90",9,7,7,0,"page",7],["Кожаная скрутка для инструментов","Кожа",31.08,39.6,93.9,36.19,39.6,61.32,"4202.91.90",4.5,5,4,0,"page",5],["Свадебная гостевая книга","Свадьба",23.61,38.97,46.09,34.39,38.97,41.26,"4820.10.20",0,8,3,5.95,"page",7],["Подарочный набор для шаферов","Свадьба",11.53,13.59,22.06,13.18,13.59,14.65,null,null,14,4,5.4,"page",13],["Галстуки для шаферов","Свадьба",18.2,30,33.15,26.34,30,31.75,"6215.90.00",5,9,5,0,"page",8],["Именная коробочка для колец","Свадьба",18.71,24.95,26.23,19.84,24.95,24.99,"4202.99.50",7.8,11,3,5.4,"page",6],["Халат невесты и подружек с вышивкой","Свадьба",32.56,46.5,70.48,44.59,46.5,51.69,"6208.91.10",7.5,12,5,5.99,"page",11],["Джинсовая куртка с вышивкой","Вышивка и текстиль",9.73,32.5,89.99,30.1,32.5,46.1,null,null,9,4,2.99,"page",8],["Вышитая кепка","Вышивка и текстиль",15.18,24.99,32.17,16.82,24.99,30.3,"6505.00.20",7.5,11,2,5.5,"page",7],["Вышитые нашивки","Вышивка и текстиль",10.98,17.04,23.02,16.19,17.04,17.41,null,null,9,1,5.99,"page",7],["Блузка с ручной вышивкой","Вышивка и текстиль",67.13,129,142,129,129,129,"6206.30.30",15.4,11,10,0,"page",1],["Льняное платье","Вышивка и текстиль",95.4,107.24,143.65,102.5,107.24,121.8,"6204.59.40",6.6,5,4,0,"page",1],["Именной шёлковый платок","Вышивка и текстиль",22,26.1,39,25.95,26.1,33.76,"6214.10.10",1.2,9,3,5.95,"page",5],["Именное колье (серебро)","Украшения",19.41,22.49,26.52,22,22.49,24.5,"7113.11.50",5,11,7,0,"page",11],["Серебряная печатка","Украшения",33.53,37.95,85.28,37.4,37.95,63.55,"7113.11.50",5,12,6,2,"page",10],["Чокеры из натуральных камней","Украшения",23.82,33.59,46.71,29.68,33.59,38.84,"7116.20.05",3.3,72,6,4.35,"web",14],["Браслеты из натуральных камней","Украшения",18.7,26.65,40.28,23.47,26.65,32.1,"7116.20.05",3.3,72,4,5.7,"web",15],["Акварельный портрет дома по фото","Искусство",22.45,41.24,48.3,26.95,41.24,41.57,"9701.21.00.00",0,13,9,0,"page",12],["Картина места свадьбы","Искусство",12.53,34.13,48.92,21.39,34.13,42.96,"9701.21.00.00",0,10,8,0,"page",8],["Керамическая кружка ручной работы","Керамика",28.98,37.02,57.2,33.1,37.02,45.97,"6912.00.44",10,100,53,0,"page",null,"Хрупкий товар: нужна усиленная упаковка, и доставка может стоить дороже, чем указано в настройках.",8.58],["Керамическая ваза ручной работы","Керамика",42.27,73.5,160.34,64.8,73.5,88.55,"6913.90.50",6,100,48,3.56,"page",null,"Хрупкий товар: нужна усиленная упаковка, и доставка может стоить дороже, чем указано в настройках. В выборке есть и маленькие, и большие вазы, поэтому рынок широкий.",17.12],["Набор керамических тарелок","Керамика",59,113.34,167.24,78.75,113.34,134.42,"6912.00.48",9.8,100,59,0,"page",null,"Хрупкий и тяжёлый товар: доставка набора почти наверняка дороже $25, впишите реальную в настройках. В выборке наборы разного размера (2–6 предметов). Ставка пошлины зависит от состава набора: от 4,5% до 9,8%, взята верхняя.",17.29],["Соевая свеча ручной работы","Свечи и мыло",19.93,34.29,52.02,30.75,34.29,39.06,"3406.00.00",0,100,19,7.15,"page",null,"Требования к ввозу и продаже свечей в США в этом расчёте не проверялись.",10.26],["Мыло ручной работы","Свечи и мыло",12.88,20.51,32.73,15.44,20.51,25.56,"3401.11.50",0,100,18,6.84,"page",null,"Требования к ввозу и продаже мыла в США в этом расчёте не проверялись. В выборке есть и отдельные куски, и крупные брикеты.",8.07]];
+var k=0.13,A=0.50,PO=0.02,WD=0.01,H=1-PO-WD;
+function $(i){return document.getElementById(i)}
+function f(x){return '$'+(Math.round(x*100)/100).toFixed(2)}
+function num(i){var v=parseFloat($(i).value);return isNaN(v)||v<0?0:v}
+(function(){var g='',h='';CATS.forEach(function(c,i){if(c[1]!==g){if(g)h+='</optgroup>';g=c[1];h+='<optgroup label="'+g+'">'}h+='<option value="'+i+'">'+c[0]+'</option>'});$('cat').innerHTML=h+'</optgroup>'})();
+function priceFor(L,d,c,S){var den=H*(1-k)-d/(1-c);if(den<=0)return null;return (L/(1-c)+S-H*(S*(1-k)-A))/den}
+function split(P,d,c,S){var R=P+S,etsy=0.20+0.13*R+0.30,E=R-etsy,aft=H*E,pl=Math.max(c*(aft-S),0);return {R:R,etsy:etsy,pay:(PO+WD)*E,pl:pl,duty:d*P,ship:S,net:aft-S-pl-d*P}}
+function up90(x){var i=Math.floor(x);return +((x-i)<=0.90?i+0.90:i+1.90).toFixed(2)}
+function calc(){
+ var L=num('loc'),c=num('pl')/100,S=num('S'),cat=CATS[$('cat').value],qi=parseInt($('st').value);
+ var d=cat[9]===null?0:cat[9]/100;
+ var t25=cat[2],tmed=cat[3],t75=cat[4],tmk=cat[qi];
+ var be=priceFor(L,d,c,S);if(be===null||L<=0){$('ans').className='ans y';$('ans').innerHTML='<p>Введите цену, по которой продаёте дома.</p>';['cmp','scale','leg','bar','tb','tips','warn'].forEach(function(i){$(i).innerHTML=''});return}
+ var target=tmk-S,state=be<=target?'g':(be+S<=t75?'y':'r');
+ var rec=up90(Math.max(be,target)),r=split(rec,d,c,S),extra=r.net-L;
+ var a;
+ if(state==='g')a='<div class="tag">Выгодно</div><div class="big">'+f(rec)+' <small>цена товара на Etsy</small></div><p>Вы получите на руки <b>'+f(r.net)+'</b> — на <b>'+f(extra)+'</b> больше, чем дома. Покупатель заплатит '+f(rec+S)+' с доставкой, это обычная цена для такого товара.</p>';
+ else if(state==='y')a='<div class="tag">Можно, но без выигрыша</div><div class="big">'+f(rec)+' <small>цена товара на Etsy</small></div><p>Вы получите на руки <b>'+f(r.net)+'</b> — примерно столько же, сколько дома. Покупатель заплатит '+f(rec+S)+' с доставкой: это дороже, чем у большинства, но ещё в пределах рынка. Продавать дешевле нельзя — будет убыток.</p>';
+ else a='<div class="tag">Не выгодно</div><div class="big">'+f(rec)+' <small>минимум, чтобы не уйти в убыток</small></div><p>При этой цене покупатель заплатит <b>'+f(rec+S)+'</b> с доставкой, а три четверти похожих товаров стоят дешевле <b>'+f(t75)+'</b>. По такой цене товар, скорее всего, не купят.</p>';
+ $('ans').className='ans '+state;$('ans').innerHTML=a;
+ $('cmp').innerHTML='<div><div class="l">Дома вы получаете</div><div class="v">'+f(L)+'</div></div><div><div class="l">Ваш минимум на Etsy</div><div class="v">'+f(be)+'</div><div class="l">с доставкой '+f(be+S)+'</div></div><div><div class="l">Обычная цена на рынке</div><div class="v">'+f(tmk)+'</div><div class="l">с доставкой</div></div>';
+ // scale
+ var ours=be+S,recT=rec+S,max=Math.max(t75,recT)*1.18,p=function(x){return Math.max(0,Math.min(100,x/max*100))};
+ var same=Math.abs(recT-ours)<max*0.09,col=state==='g'?'var(--g)':state==='y'?'var(--y)':'var(--r)';
+ var s='<div class="track"></div><div class="zone" style="left:'+p(t25)+'%;width:'+(p(t75)-p(t25))+'%"></div><div class="medt" style="left:'+p(tmed)+'%"></div>';
+ if(same)s+='<div class="mk up" style="left:'+p(recT)+'%;color:'+col+'">Ваша цена с доставкой<br><b>'+f(recT)+'</b><i style="background:'+col+'"></i></div>';
+ else s+='<div class="mk up" style="left:'+p(recT)+'%;color:'+col+'">Рекомендуем<br><b>'+f(recT)+'</b><i style="background:'+col+'"></i></div><div class="mk dn" style="left:'+p(ours)+'%"><i style="background:#555"></i>Ваш минимум<br><b>'+f(ours)+'</b></div>';
+ $('scale').innerHTML=s;
+ $('leg').innerHTML='<em></em>Здесь продаёт большинство: '+f(t25)+' – '+f(t75)+'. Синяя черта — середина рынка, '+f(tmed)+'. Доставка у конкурентов: '+(cat[13]==='page'?'у '+cat[11]+' из '+cat[10]:'у '+cat[11]+' из '+cat[14]+' проверенных')+' бесплатная, '+(cat[16]?'платная обычно около '+f(cat[16]):'обычная — '+(cat[12]>0?'около '+f(cat[12]):'бесплатная'))+'.';
+ // warnings
+ var w=[];
+ if(cat[9]===null)w.push('Ставка пошлины США для этого товара не подтверждена, в расчёте она равна 0. Минимальная цена может быть занижена.');
+ if(cat[15])w.push(cat[15]);
+ if(cat[13]==='web')w.push('Для этого товара рынок оценён грубее: цены 72 листингов из поиска плюс обычная доставка по '+cat[14]+' проверенным листингам.');
+ else if(cat[10]<8)w.push('Данные о рынке слабые: только '+cat[10]+' листингов. Отнеситесь к границам рынка как к ориентиру.');
+ $('warn').innerHTML=w.map(function(x){return '<div class="note">'+x+'</div>'}).join('');
+ // money
+ var parts=[['Доставка (перевозчику)',r.ship,'#b8c0cc'],['Комиссии Etsy',r.etsy,'#f28b54'],['Payoneer и вывод (3%)',r.pay,'#f2c14e'],['Pluto ('+Math.round(c*100)+'%)',r.pl,'#8e7cc3'],['Пошлина США'+(cat[9]===null?'':' ('+cat[9]+'%)'),r.duty,'#d96c6c'],['Вы получаете на руки',r.net,'#3aa76d']];
+ $('bar').innerHTML=parts.map(function(x){return '<div title="'+x[0]+'" style="width:'+Math.max(x[1],0)/r.R*100+'%;background:'+x[2]+'"></div>'}).join('');
+ $('tb').innerHTML='<tr class="t"><td>Покупатель платит: товар '+f(rec)+' + доставка '+f(S)+'</td><td>'+f(r.R)+'</td></tr>'+parts.map(function(x,i){return '<tr'+(i===5?' class="t"':'')+'><td><i style="background:'+x[2]+'"></i>'+x[0]+'</td><td>'+(i<5?'−':'')+f(x[1])+'</td></tr>'}).join('');
+ // tips
+ var tips=[];
+ if(state==='r'){
+  var g=function(s){return priceFor(L,d,c,s)+s-t75};
+  if(g(0)<=0){var lo=0,hi=S;for(var i=0;i<40;i++){var m=(lo+hi)/2;if(g(m)<=0)lo=m;else hi=m}tips.push('<b>Удешевить доставку.</b> Товар впишется в рынок, если доставка будет не дороже <b>'+f(lo)+'</b> (сейчас '+f(S)+').')}
+  else tips.push('Даже с бесплатной доставкой цена остаётся выше рынка.');
+  var pm=t75-S;if(pm>0){var mx=split(pm,d,c,S).net;if(mx>0)tips.push('<b>Другой товар.</b> При доставке '+f(S)+' на Etsy в этой категории проходят товары, которые дома стоят не дороже <b>'+f(mx)+'</b>.')}
+  else tips.push('Доставка '+f(S)+' одна стоит больше, чем похожий товар у конкурентов вместе с доставкой.');
+  tips.push('<b>Набор.</b> Продавать несколько штук одним заказом: доставка делится на все изделия.');
+ }else if(state==='y'){
+  tips.push('Чтобы зарабатывать больше, чем дома, нужна доставка дешевле или товар, который выделяется (тогда можно ставить цену выше середины рынка).');
+  tips.push('<b>Набор.</b> Несколько изделий в одном заказе: доставка делится на все.');
+ }else{
+  var top=t75-S;if(top>rec)tips.push('Потолок рынка для вас — около <b>'+f(top)+'</b> за товар: дороже продаёт только четверть конкурентов. Поднимать цену к нему стоит после появления отзывов.');
+  tips.push('Ниже <b>'+f(be)+'</b> цену не опускайте, даже на распродаже: это убыток относительно продажи дома.');
+ }
+ if(c>0.1){var r10=split(rec,d,0.1,S);tips.push('С тейкрейтом Pluto 10% вместо 20% при той же цене вы получили бы '+f(r10.net)+'.')}
+ var cap=function(P,dd){return P>0?Math.max(split(P,dd,c,S).net,0):0};
+ $('all').innerHTML='<tr class="t"><td>Товар</td><td>Рынок с доставкой</td><td>Доставка у конкурентов</td><td>Выгодно, если дома до</td><td>Предел цены дома</td></tr>'+CATS.map(function(x,i){var dd=x[9]===null?0:x[9]/100,a=cap(x[qi]-S,dd),b=cap(x[4]-S,dd);return [i,x,a,b]}).sort(function(u,v){return v[3]-u[3]}).map(function(o){var x=o[1];return '<tr'+(o[0]==$('cat').value?' style="background:#eef4fd"':'')+'><td style="text-align:left">'+x[0]+'</td><td>'+f(x[2])+' – '+f(x[4])+'</td><td>'+(x[12]>0?f(x[12]):'бесплатно')+'</td><td>'+(o[2]>0?f(o[2]):'—')+'</td><td>'+(o[3]>0?f(o[3]):'—')+'</td></tr>'}).join('');
+ $('tips').innerHTML=tips.map(function(x){return '<li>'+x+'</li>'}).join('');
+}
+['loc','cat','pl','st','S'].forEach(function(i){$(i).addEventListener('input',calc)});
+calc();
+</script></body></html>

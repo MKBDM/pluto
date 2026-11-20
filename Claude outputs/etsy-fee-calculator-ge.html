@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Калькулятор прибыли Etsy для продавца из Грузии (черновик)</title>
+<style>
+:root{--ink:#1d1b24;--mut:#6a6576;--ln:#dcd8e6;--ok:#1b7a43;--bad:#b3261e;--warn:#9a6700;--card:#f7f5fb;--c1:#2e7d57;--c2:#8b8798;--c3:#c0562f}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#fff}
+main{max-width:980px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:18px;margin:0 0 10px}
+.note{color:var(--mut);font-size:14px;margin:0 0 12px}
+.warn{border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:18px;min-width:0}
+label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
+h2+label{margin-top:0}
+input,select{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.big div{background:#fff;border:1px solid var(--ln);border-radius:10px;padding:10px;text-align:center}
+.big b{display:block;font-size:20px}
+.big span{font-size:12px;color:var(--mut)}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--ln);background:#fff}
+.bar i{display:block;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mut);margin:6px 0 12px}
+.leg u{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;text-decoration:none}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff;min-width:420px}
+th,td{border-bottom:1px solid var(--ln);padding:8px 10px;text-align:right;vertical-align:top}
+th:first-child,td:first-child,td.l,th.l{text-align:left}
+tr.tot td{font-weight:700}
+.st{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;border:1px solid var(--ln);background:#fff;white-space:nowrap}
+.st.ok{border-color:var(--ok);color:var(--ok)}
+.st.as{border-color:var(--warn);color:var(--warn)}
+.st.no{border-color:var(--bad);color:var(--bad)}
+ul{padding-left:20px;font-size:14px;color:var(--mut);margin:6px 0}
+a{color:#5b3fa8}
+</style>
+</head>
+<body>
+<main>
+<h1>Калькулятор прибыли Etsy: продавец из Грузии (черновик)</h1>
+<p class="note">Считает прибыль с одной продажи после комиссий Etsy для магазина с банковским счётом в Грузии. Все суммы в долларах США: выплаты Etsy продавцам из Грузии идут в USD через Payoneer. Ставки взяты только с официальных страниц Etsy, у каждой указан источник и статус внизу страницы. Комиссии Payoneer пока не заложены.</p>
+<p class="warn">Внутренний черновик. Ставки Etsy могут измениться: Etsy оставляет за собой право менять комиссии. Перед использованием сверьте с источниками внизу.</p>
+
+<div class="grid">
+<section class="card" aria-label="Ввод">
+<h2>Заказ</h2>
+<label for="price">Цена товара в листинге, $</label>
+<input id="price" type="number" min="0" step="0.01" inputmode="decimal" value="50">
+<div class="two">
+<div><label for="ship">Доставка, которую платит покупатель, $</label><input id="ship" type="number" min="0" step="0.01" inputmode="decimal" value="0"></div>
+<div><label for="gift">Доплата за персонализацию / подарочную упаковку, $</label><input id="gift" type="number" min="0" step="0.01" inputmode="decimal" value="0"></div>
+</div>
+<label for="tax">Налог с покупателя, собранный Etsy, $ (если есть)</label>
+<input id="tax" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+<h2 style="margin-top:18px">Ваши затраты</h2>
+<div class="two">
+<div><label for="cogs">Себестоимость товара и упаковки, $</label><input id="cogs" type="number" min="0" step="0.01" inputmode="decimal" value="15"></div>
+<div><label for="shipc">Реальная стоимость отправки, $</label><input id="shipc" type="number" min="0" step="0.01" inputmode="decimal" value="0"></div>
+</div>
+<label for="ads">Offsite Ads (внешняя реклама Etsy)</label>
+<select id="ads"><option value="0">0 % (не участвую или заказ не из рекламы)</option><option value="12">12 % (продажи от 10 000 $ за 365 дней)</option><option value="15">15 % (стандартная ставка)</option></select>
+<label for="cur">Валюта листинга</label>
+<select id="cur"><option value="usd">USD (как валюта платёжного счёта)</option><option value="other">Другая (конвертация 2,5 %)</option></select>
+<label for="target">Целевая прибыль с одной продажи, $ (для расчёта цены)</label>
+<input id="target" type="number" min="0" step="0.01" inputmode="decimal" value="10">
+</section>
+
+<section class="card" aria-live="polite" aria-label="Результат">
+<h2>Результат</h2>
+<div class="big">
+<div><b id="profit">—</b><span>Прибыль</span></div>
+<div><b id="fees">—</b><span>Комиссии Etsy</span></div>
+<div><b id="margin">—</b><span>Маржа от выручки</span></div>
+</div>
+<div class="bar" id="bar" role="img" aria-label="Распределение выручки"></div>
+<div class="leg"><span><u style="background:var(--c1)"></u>Прибыль</span><span><u style="background:var(--c2)"></u>Ваши затраты</span><span><u style="background:var(--c3)"></u>Комиссии Etsy</span></div>
+<div class="tw"><table>
+<tbody id="rows"></tbody></table></div>
+<h2 style="margin-top:16px">Какая цена нужна</h2>
+<div class="tw"><table><tbody id="need"></tbody></table></div>
+</section>
+</div>
+
+<section class="card" style="margin-bottom:16px" aria-label="Payoneer">
+<h2>Payoneer (пока не заложен)</h2>
+<p class="note">Etsy пишет на странице Etsy Payments Policy, что Payoneer может брать комиссии за вывод средств и устанавливать минимальные суммы. Какие именно тарифы для Грузии, там не указано. Когда найдём их на официальных страницах Payoneer, добавим сюда. Пока поле можно заполнить вручную для проверки.</p>
+<div class="two">
+<div><label for="po">Комиссия Payoneer, % от выплаты</label><input id="po" type="number" min="0" step="0.1" value="0"></div>
+<div><label>Статус</label><div class="st no" style="margin-top:8px">не задано, источник Payoneer ещё не добавлен</div></div>
+</div>
+</section>
+
+<section class="card" aria-label="Источники">
+<h2>Ставки и источники</h2>
+<div class="tw"><table>
+<thead><tr><th>Комиссия</th><th>Ставка для Грузии</th><th class="l">Источник и статус</th></tr></thead>
+<tbody>
+<tr><td>Размещение листинга</td><td>0,20 $</td><td class="l"><span class="st ok">официально</span> <a href="https://www.etsy.com/legal/fees">etsy.com/legal/fees</a>, «Last updated on Oct 5, 2026». Листинг живёт 4 месяца, продление и каждая продажа многоштучного листинга тоже стоят 0,20 $. Здесь заложено 0,20 $ на заказ.</td></tr>
+<tr><td>Комиссия за продажу</td><td>6,5 %</td><td class="l"><span class="st ok">официально</span> там же. База: цена товара плюс доставка и упаковка в подарок; для продавцов вне США также наценка за персонализацию и налоги, которые продавец обязан включать в цену.</td></tr>
+<tr><td>Обработка платежей Etsy Payments</td><td>6,5 % + 0,30 $ за заказ</td><td class="l"><span class="st ok">официально</span> <a href="https://www.etsy.com/legal/etsy-payments/">Etsy Payments Policy</a>, «Last updated on Jul 31, 2026», строка Georgia; то же в справке <a href="https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy">Payment Processing Fees</a>. База: вся сумма продажи, включая доставку и налог. Комиссия за вывод (deposit fee) для Грузии в таблице не указана.</td></tr>
+<tr><td>Offsite Ads</td><td>15 % (12 % после 10 000 $ продаж за 365 дней), максимум 100 $ с заказа</td><td class="l"><span class="st ok">ставка официально</span> <a href="https://www.etsy.com/legal/fees">etsy.com/legal/fees</a>. Магазины ниже порога могут отказаться. База названа «order amount»; здесь взята сумма заказа без налога (цена, доставка, упаковка), точное определение базы не проверено.</td></tr>
+<tr><td>Конвертация валюты</td><td>2,5 %, если валюта листинга не USD</td><td class="l"><span class="st ok">официально</span> etsy.com/legal/fees. Выплаты в Грузии идут в USD, поэтому листинг в USD без конвертации.</td></tr>
+<tr><td>Регуляторный сбор</td><td>0 %</td><td class="l"><span class="st as">по списку</span> <a href="https://help.etsy.com/hc/en-us/articles/1500011073202-What-is-a-Regulatory-Operating-Fee">справка Etsy</a> перечисляет Canada, France, Hungary, Italy, India, Spain, Türkiye, UK, Vietnam; Грузии в списке нет.</td></tr>
+<tr><td>Выплаты</td><td>USD на Payoneer, еженедельно по понедельникам</td><td class="l"><span class="st ok">официально</span> Etsy Payments Policy: продавцы из Грузии подключают Etsy Payments через Payoneer.</td></tr>
+<tr><td>НДС на комиссии</td><td>не заложен</td><td class="l"><span class="st no">не выяснено</span> Etsy указывает комиссии без НДС и начисляет его «там, где требуется»; применяется ли это к Грузии, на проверенных страницах не сказано.</td></tr>
+<tr><td>Плата за открытие магазина (set-up fee)</td><td>не заложена</td><td class="l"><span class="st no">не выяснено</span> на странице комиссий упомянута как разовая и невозвратная, сумма в проверенном тексте не указана. На расчёт одной продажи не влияет.</td></tr>
+</tbody></table></div>
+<ul>
+<li>Формулы: комиссия за продажу = 6,5 % × (цена + доставка + упаковка); обработка = 6,5 % × (цена + доставка + упаковка + налог) + 0,30 $; Offsite Ads = ставка × (цена + доставка + упаковка), не больше 100 $.</li>
+<li>Прибыль = цена + доставка + упаковка − комиссии Etsy − Payoneer − себестоимость − реальная отправка. Налоги на ваш доход не учтены.</li>
+<li>Расчёт цены не учитывает потолок Offsite Ads в 100 $: для обычных цен до 600 $ он не сработает.</li>
+</ul>
+</section>
+</main>
+<script>
+(function(){
+function $(id){return document.getElementById(id)}
+function num(id){var v=parseFloat(String($(id).value).replace(',','.'));return isFinite(v)&&v>=0?v:0}
+function m(x){return (x<0?'−':'')+'$'+Math.abs(x).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function pc(x){return x.toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:1})+' %'}
+var TX=0.065,PP=0.065,PF=0.30,LF=0.20,CV=0.025,CAP=100;
+function rates(){return{ads:parseFloat($('ads').value)/100,cv:$('cur').value==='other'?CV:0,po:num('po')/100}}
+function calc(){
+  var P=num('price'),S=num('ship'),G=num('gift'),T=num('tax'),C=num('cogs'),SC=num('shipc'),r=rates();
+  var R=P+S+G;
+  var f={lf:LF,tx:TX*R,pp:PP*(R+T)+PF,ads:Math.min(r.ads*R,CAP),cv:r.cv*(R+T),reg:0};
+  var fees=f.lf+f.tx+f.pp+f.ads+f.cv+f.reg;
+  var po=(R-fees)*r.po;
+  var costs=C+SC;
+  var profit=R-fees-po-costs;
+  $('profit').textContent=m(profit);$('profit').className=profit>=0?'pos':'neg';
+  $('fees').textContent=m(fees+po);
+  $('margin').textContent=R>0?pc(profit/R*100):'—';
+  var feeAll=fees+po;
+  var base=Math.max(R,costs+feeAll,0.0001);
+  var wp=Math.max(profit,0)/base*100,wc=costs/base*100,wf=feeAll/base*100;
+  $('bar').innerHTML='<i style="width:'+wp+'%;background:var(--c1)"></i><i style="width:'+wc+'%;background:var(--c2)"></i><i style="width:'+wf+'%;background:var(--c3)"></i>';
+  var rows=[
+    ['Выручка (цена + доставка + упаковка)',m(R)],
+    ['Размещение листинга',m(f.lf)],
+    ['Комиссия за продажу 6,5 %',m(f.tx)],
+    ['Обработка платежа 6,5 % + 0,30 $',m(f.pp)],
+    ['Offsite Ads',m(f.ads)],
+    ['Конвертация валюты',m(f.cv)],
+    ['Регуляторный сбор (для Грузии нет)',m(0)],
+    ['Payoneer (пока вручную)',m(po)],
+    ['Итого комиссии',m(feeAll)],
+    ['Ваши затраты (товар, упаковка, отправка)',m(costs)],
+    ['Прибыль',m(profit)]
+  ];
+  var h='';
+  for(var i=0;i<rows.length;i++){var t=(i===8||i===10)?' class="tot"':'';h+='<tr'+t+'><td>'+rows[i][0]+'</td><td>'+rows[i][1]+'</td></tr>'}
+  $('rows').innerHTML=h;
+  var k=TX+PP+r.ads+r.cv,costsAll=C+SC;
+  function priceFor(target){
+    var X=(target+costsAll)/(1-r.po);
+    var Rn=(X+PP*T+r.cv*T+PF+LF)/(1-k);
+    return Rn-S-G;
+  }
+  var be=priceFor(0),tg=priceFor(num('target'));
+  $('need').innerHTML='<tr><td>Цена безубыточности (прибыль 0)</td><td>'+m(Math.max(be,0))+'</td></tr><tr><td>Цена для прибыли '+m(num('target'))+' с продажи</td><td>'+m(Math.max(tg,0))+'</td></tr>';
+}
+['price','ship','gift','tax','cogs','shipc','ads','cur','target','po'].forEach(function(id){var e=$(id);e.addEventListener('input',calc);e.addEventListener('change',calc)});
+calc();
+})();
+</script>
+</body>
+</html>

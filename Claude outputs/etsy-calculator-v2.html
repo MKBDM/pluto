@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Калькулятор цены по нише v2 (черновик для комментариев, внутренний)</title>
+<style>
+:root{--ink:#1d1b24;--mut:#6a6576;--ln:#dcd8e6;--ac:#5b3fa8;--ok:#1b7a43;--bad:#b3261e;--warn:#9a6700;--card:#f7f5fb}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#fff}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:18px;margin:0 0 10px}
+h3{font-size:15px;margin:16px 0 6px}
+.note{color:var(--mut);font-size:14px;margin:0 0 14px}
+.warn{border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
+.info{border:1px solid var(--ln);background:var(--card);border-radius:8px;padding:10px 12px;font-size:14px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:18px;min-width:0}
+label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
+.card>label:first-of-type,.card>h2+label{margin-top:0}
+input,select,textarea{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:64px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.verdict{border-radius:10px;padding:14px 16px;font-size:17px;margin-bottom:14px;border:1px solid var(--ln);background:#fff}
+.verdict.ok{border-color:var(--ok);color:var(--ok)}
+.verdict.bad{border-color:var(--bad);color:var(--bad)}
+dl{margin:0;display:grid;gap:8px}
+dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--ln);padding-bottom:6px}
+dt{color:var(--mut);font-size:14px}
+dd{margin:0;font-weight:600;text-align:right}
+.tw{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px;background:#fff}
+th,td{border-bottom:1px solid var(--ln);padding:8px 10px;text-align:right;vertical-align:top}
+th:first-child,td:first-child{text-align:left}
+tr.best td{font-weight:700;color:var(--ok)}
+.st{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;border:1px solid var(--ln);background:#fff;white-space:nowrap}
+.st.ok{border-color:var(--ok);color:var(--ok)}
+.st.as{border-color:var(--warn);color:var(--warn)}
+.st.no{border-color:var(--bad);color:var(--bad)}
+.q{border:1px dashed var(--warn);border-radius:8px;padding:10px 12px;font-size:14px;margin-top:12px}
+ul{padding-left:20px;font-size:14px;color:var(--mut);margin:6px 0}
+td.l{text-align:left}
+</style>
+</head>
+<body>
+<main>
+<h1>Калькулятор цены по нише (v2, черновик для комментариев)</h1>
+<p class="note">Что делает: для выбранной ниши берёт заранее собранные данные Etsy, считает потолок цены мастера и нужную цену на Etsy, сравнивает товар с предложениями в нише и показывает, сколько мастер платит вам за 12 месяцев по каждому пакету. Значения в полях при открытии — пример, не данные конкретного мастера.</p>
+<p class="warn">Внутренний инструмент: содержит вашу экономику и ставки. Не подтверждать для публикации на сайте. Ставки с пометкой «допущение» или «не задано» нужно подтвердить или задать до использования на реальных заявках.</p>
+<div class="info"><b>Откуда данные ниш.</b> 30 ниш: срез Etsy Open API 06.11.2026 (по 100 свежих листингов на запрос, отчёт «Ниши $50–100»). Чокеры и браслеты: мой срез в вашем браузере 12.11.2026, только медиана цены (первая страница поиска, около 60 объявлений, включая рекламные). Это цены предложений, а не продаж: Etsy не показывает продажи отдельного листинга. Выборки небольшие (число листингов с ценой указано в таблице ниши).</div>
+
+<div class="grid">
+<section class="card" aria-label="Данные">
+<h2>Данные мастера</h2>
+<label for="niche">Ниша</label>
+<select id="niche"></select>
+<label for="master">Цена мастера за штуку, ₼ (сколько он хочет получить)</label>
+<input id="master" type="number" min="0" step="0.01" inputmode="decimal" value="40">
+<label for="retail">Желаемая цена на Etsy, $ (без доставки)</label>
+<input id="retail" type="number" min="0" step="0.01" inputmode="decimal" value="">
+<span class="note" id="retailhint"></span>
+<label for="pack">Пакет</label>
+<select id="pack">
+<option value="1">1. Коллектив</option>
+<option value="2">2. Партнёрский магазин</option>
+<option value="3">3. Магазин без комиссии</option>
+<option value="4">4. Независимый магазин</option>
+</select>
+<label for="sales">Продаж в месяц, шт</label>
+<input id="sales" type="number" min="0" step="1" inputmode="numeric" value="5">
+<div class="two">
+<div><label for="ship">Доставка, которую платит покупатель, $</label><input id="ship" type="number" min="0" step="0.01" value="0"></div>
+<div><label for="shipc">Реальная стоимость доставки для вас, $</label><input id="shipc" type="number" min="0" step="0.01" value="0"></div>
+</div>
+<span class="note">Etsy берёт комиссию и со стоимости доставки. Пока тарифы перевозчика не заданы, оставьте 0.</span>
+</section>
+
+<section class="card" aria-live="polite" aria-label="Результат">
+<h2>Результат для выбранного пакета</h2>
+<div id="verdict" class="verdict">—</div>
+<dl>
+<div><dt>Потолок цены мастера</dt><dd id="ceil">—</dd></div>
+<div><dt>Запас (потолок минус цена мастера)</dt><dd id="gap">—</dd></div>
+<div><dt>Нужная цена на Etsy для цены мастера</dt><dd id="need">—</dd></div>
+<div><dt>Ваша комиссия с одной штуки</dt><dd id="comm">—</dd></div>
+<div><dt>Etsy, Payoneer и другое с одной штуки</dt><dd id="fees">—</dd></div>
+</dl>
+</section>
+</div>
+
+<section class="card" style="margin-bottom:16px" aria-label="Ниша">
+<h2>Данные выбранной ниши</h2>
+<div class="tw"><table><tbody id="nrows"></tbody></table></div>
+<h3>Соответствие нашего товара предложениям в нише</h3>
+<div class="two">
+<div><label for="pers">Можно нанести имя, дату или рисунок?</label><select id="pers"><option value="">не указано</option><option value="1">да</option><option value="0">нет</option></select></div>
+<div><label for="wt">Вес в упаковке, г</label><input id="wt" type="number" min="0" step="1" value=""></div>
+</div>
+<div id="cmp" class="q"></div>
+<div class="two">
+<div><label for="match">Ваше решение: товар соответствует конкурентам?</label><select id="match"><option value="">ещё не решено</option><option>соответствует</option><option>частично</option><option>не соответствует</option></select></div>
+<div><label for="mnote">Комментарий</label><textarea id="mnote"></textarea></div>
+</div>
+<span class="note">Сравнение по цене, весу и персонализации считает калькулятор; по фото и качеству изделие сравниваете вы. Решение запоминается только пока страница открыта.</span>
+</section>
+
+<section class="card" style="margin-bottom:16px" aria-label="За 12 месяцев">
+<h2>Сколько мастер платит вам за 12 месяцев</h2>
+<div class="tw"><table>
+<thead><tr><th>Пакет</th><th>Вход, ₼</th><th>За 12 мес., ₼</th><th>Окупаемость к пакету 1</th></tr></thead>
+<tbody id="rows"></tbody></table></div>
+<p class="note" style="margin:10px 0 0">Как в etsy-packages-v1.md: вход пакета делится на ежемесячную экономию относительно пакета 1; 50 ₼ за партию пакета 1 в расчёте не учитываются. Выделена строка с наименьшей суммой для мастера. Ваше время и налоги не учтены.</p>
+</section>
+
+<section class="card" aria-label="Ставки">
+<h2>Ставки и допущения (можно менять)</h2>
+<div class="tw"><table>
+<thead><tr><th>Параметр</th><th>Значение</th><th class="l">Статус и источник</th></tr></thead>
+<tbody>
+<tr><td>Курс, ₼ за 1 $</td><td><input id="rate" type="number" step="0.01" value="1.7"></td><td class="l"><span class="st as">допущение</span> как в прежних расчётах; решение владельца: курс общий по стране, дату не уточняли</td></tr>
+<tr><td>Etsy: комиссия за продажу, %</td><td><input id="f_tr" type="number" step="0.1" value="6.5"></td><td class="l"><span class="st ok">подтверждено</span> Etsy Fees &amp; Payments Policy, обновлено 05.10.2026: 6,5 % от цены, доставки и упаковки в подарок</td></tr>
+<tr><td>Etsy: платёж и прочие комиссии, %</td><td><input id="f_pr" type="number" step="0.1" value="6"></td><td class="l"><span class="st as">допущение</span> отчёт 06.11 закладывает 12,5 % всего (6,5 % подтверждено, остаток 6 % не расшифрован). На странице Etsy ставка платежа не указана: зависит от страны счёта</td></tr>
+<tr><td>Etsy: фиксированная часть, $ за заказ</td><td><input id="fix" type="number" step="0.01" value="0.5"></td><td class="l"><span class="st as">допущение</span> 0,50 $ из отчёта 06.11; подтверждено только размещение листинга 0,20 $</td></tr>
+<tr><td>Offsite Ads, % от цены</td><td><input id="ads" type="number" step="0.1" value="15"></td><td class="l"><span class="st ok">ставка подтверждена</span> 15 % (12 % после 10 000 $ продаж за 365 дней, максимум 100 $ за заказ). <span class="st no">не проверено</span>, действует ли для вашего магазина; 15 % заложено как худший случай, 0 если выключено. Etsy Ads (бюджет мастера) сюда не входит</td></tr>
+<tr><td>Конвертация валюты Etsy, %</td><td><input id="f_cv" type="number" step="0.1" value="0"></td><td class="l"><span class="st as">условно</span> 2,5 % действует, если валюта листинга отличается от валюты платёжного счёта; ваш случай не уточнён</td></tr>
+<tr><td>Payoneer, % от суммы</td><td><input id="f_po" type="number" step="0.1" value="0"></td><td class="l"><span class="st no">не задано</span> нужны тариф и страна счёта; пока 0</td></tr>
+<tr><td>Пошлина и сборы при ввозе, $ за штуку</td><td><input id="duty" type="number" step="0.01" value="0"></td><td class="l"><span class="st no">не задано</span> кто платит пошлину при отправке из Азербайджана, не решено; в отчёте 06.11 пошлина считалась при ином способе отправки</td></tr>
+<tr><td>Налоги на выплату мастеру, %</td><td><input id="tax" type="number" step="0.1" value="0"></td><td class="l"><span class="st no">не задано</span> отложено, задача [X15]</td></tr>
+<tr><td>Комиссия пакета 1 с проданной штуки, ₼</td><td><input id="c1" type="number" step="0.01" value="20.4"></td><td class="l"><span class="st as">условно</span> примерно 12 $; на публичной странице суммы нет, решение не принято</td></tr>
+<tr><td>Комиссия пакета 2 с проданной штуки, ₼</td><td><input id="c2" type="number" step="0.01" value="10"></td><td class="l"><span class="st as">условно</span> зависимость от цены не определена</td></tr>
+<tr><td>Комиссия пакета 3 с проданной штуки, ₼</td><td><input id="c3" type="number" step="0.01" value="0"></td><td class="l"><span class="st ok">решение 12.11</span> без комиссии</td></tr>
+<tr><td>Ежемесячный платёж пакета 3, ₼</td><td><input id="m3" type="number" step="0.01" value="50"></td><td class="l"><span class="st as">подтвердить</span> остаётся ли абонемент</td></tr>
+<tr><td>Вход пакета 1 / 2 / 3 / 4, ₼</td><td><div class="two"><input id="e1" type="number" step="1" value="50"><input id="e2" type="number" step="1" value="500"><input id="e3" type="number" step="1" value="1000"><input id="e4" type="number" step="1" value="2000"></div></td><td class="l"><span class="st ok">решение</span> страница пакетов</td></tr>
+</tbody></table></div>
+<ul>
+<li>Потолок цены мастера = цена на Etsy и доставка покупателя − комиссии Etsy − Offsite Ads − Payoneer − реальная доставка − ваша комиссия − пошлина, затем налог на выплату. Предельная сумма Offsite Ads (100 $ за заказ) в формуле не учитывается.</li>
+<li>Прежняя версия брала 27,5 % и 0,50 $ как одну цифру: теперь они разложены на 6,5 % (подтверждено), 6 % (допущение), 15 % Offsite Ads (худший случай).</li>
+<li>Медианы ниш посчитаны по малым выборкам свежих листингов: колебания между срезами возможны.</li>
+</ul>
+</section>
+</main>
+<script>
+(function(){
+var NICHES=[
+["leather-notebook-cover","Кожаная обложка для блокнота / тревел-джорнал","Кожа",{"n":20912,"usd":58,"p25":37.33,"med":54.0,"p75":79.78,"vpd":38.4,"vpd90":206,"hot":57,"pers":84,"pod":11,"w":340,"wn":24,"bn":16,"bmed":74.0,"bvpd":31.9,"topmed":69.9}],
+["leather-dopp-kit","Кожаный несессер (dopp kit)","Кожа",{"n":9868,"usd":80,"p25":39.9,"med":49.95,"p75":66.33,"vpd":20.0,"vpd90":205,"hot":39,"pers":93,"pod":32,"w":227,"wn":45,"bn":20,"bmed":66.0,"bvpd":22.2,"topmed":32.25}],
+["leather-guitar-strap","Кожаный ремень для гитары","Кожа",{"n":8145,"usd":69,"p25":35.0,"med":70.0,"p75":90.0,"vpd":3.4,"vpd90":36,"hot":25,"pers":58,"pod":5,"w":255,"wn":43,"bn":27,"bmed":75.0,"bvpd":5.3,"topmed":72.0}],
+["leather-camera-strap","Кожаный ремень для камеры","Кожа",{"n":6245,"usd":49,"p25":36.0,"med":56.0,"p75":74.9,"vpd":5.0,"vpd90":44,"hot":20,"pers":54,"pod":11,"w":170,"wn":19,"bn":19,"bmed":68.0,"bvpd":6.2,"topmed":56.0}],
+["leather-belt-personalized","Кожаный ремень (пояс) с гравировкой","Кожа",{"n":17464,"usd":67,"p25":41.34,"med":53.0,"p75":103.5,"vpd":5.1,"vpd90":88,"hot":25,"pers":86,"pod":10,"w":227,"wn":24,"bn":16,"bmed":66.0,"bvpd":3.1,"topmed":46.9}],
+["personalized-leather-wallet","Кожаный кошелёк с гравировкой","Кожа",{"n":58595,"usd":51,"p25":31.38,"med":49.75,"p75":64.15,"vpd":14.6,"vpd90":188,"hot":43,"pers":98,"pod":17,"w":113,"wn":23,"bn":15,"bmed":64.0,"bvpd":6.7,"topmed":49.9}],
+["leather-padfolio","Кожаный портфель-папка (padfolio)","Кожа",{"n":5820,"usd":86,"p25":45.25,"med":69.0,"p75":104.5,"vpd":8.7,"vpd90":93,"hot":40,"pers":99,"pod":2,"w":510,"wn":35,"bn":34,"bmed":68.0,"bvpd":6.0,"topmed":66.66}],
+["leather-valet-tray","Кожаный поднос-органайзер (valet tray)","Кожа",{"n":4795,"usd":80,"p25":24.99,"med":30.0,"p75":46.71,"vpd":3.8,"vpd90":73,"hot":31,"pers":85,"pod":11,"w":170,"wn":37,"bn":6,"bmed":59.0,"bvpd":53.7,"topmed":43.08}],
+["personalized-leather-journal","Именной кожаный блокнот (journal)","Кожа",{"n":41808,"usd":45,"p25":29.8,"med":49.99,"p75":75.0,"vpd":23.2,"vpd90":265,"hot":48,"pers":97,"pod":19,"w":326,"wn":9,"bn":10,"bmed":67.0,"bvpd":53.2,"topmed":69.9}],
+["leather-watch-strap","Кожаный ремешок для часов","Кожа",{"n":56347,"usd":61,"p25":45.0,"med":50.0,"p75":65.75,"vpd":3.8,"vpd90":39,"hot":26,"pers":37,"pod":21,"w":113,"wn":15,"bn":27,"bmed":60.0,"bvpd":2.3,"topmed":46.36}],
+["personalized-leather-dog-collar","Именной кожаный ошейник","Кожа",{"n":11148,"usd":58,"p25":22.89,"med":32.23,"p75":49.73,"vpd":9.2,"vpd90":186,"hot":32,"pers":92,"pod":12,"w":170,"wn":14,"bn":3,"bmed":56.0,"bvpd":22.1,"topmed":19.95}],
+["personalized-leather-tote-bag","Именная кожаная сумка-тоут","Кожа",{"n":11119,"usd":81,"p25":35.0,"med":52.99,"p75":149.9,"vpd":5.1,"vpd90":119,"hot":28,"pers":85,"pod":28,"w":454,"wn":17,"bn":9,"bmed":70.0,"bvpd":0.7,"topmed":75.0}],
+["leather-crossbody-bag","Кожаная сумка через плечо","Кожа",{"n":142524,"usd":48,"p25":62.75,"med":89.5,"p75":195.0,"vpd":2.8,"vpd90":34,"hot":15,"pers":30,"pod":27,"w":298,"wn":12,"bn":14,"bmed":77.0,"bvpd":1.4,"topmed":92.0}],
+["leather-messenger-bag","Кожаная сумка-мессенджер","Кожа",{"n":27542,"usd":59,"p25":169.09,"med":240.0,"p75":249.5,"vpd":1.6,"vpd90":17,"hot":8,"pers":54,"pod":21,"w":1204,"wn":4,"bn":3,"bmed":85.0,"bvpd":2.8,"topmed":162.99}],
+["leather-tool-roll","Кожаная скрутка для инструментов","Кожа",{"n":5845,"usd":26,"p25":50.9,"med":82.0,"p75":137.75,"vpd":2.5,"vpd90":25,"hot":7,"pers":60,"pod":12,"w":680,"wn":11,"bn":5,"bmed":67.0,"bvpd":3.9,"topmed":59.99}],
+["personalized-wedding-guest-book","Свадебная гостевая книга","Свадьба",{"n":38270,"usd":29,"p25":33.99,"med":66.0,"p75":84.0,"vpd":19.8,"vpd90":209,"hot":27,"pers":98,"pod":27,"w":2041,"wn":10,"bn":14,"bmed":70.0,"bvpd":38.2,"topmed":42.99}],
+["groomsmen-gift-box","Подарочный набор для шаферов","Свадьба",{"n":24690,"usd":70,"p25":19.72,"med":41.0,"p75":47.99,"vpd":9.5,"vpd90":98,"hot":44,"pers":97,"pod":9,"w":397,"wn":34,"bn":8,"bmed":80.0,"bvpd":60.3,"topmed":16.35}],
+["groomsmen-ties","Галстуки для шаферов","Свадьба",{"n":54743,"usd":35,"p25":13.96,"med":27.99,"p75":40.5,"vpd":3.2,"vpd90":31,"hot":14,"pers":45,"pod":13,"w":92,"wn":12,"bn":4,"bmed":70.0,"bvpd":4.7,"topmed":19.99}],
+["personalized-ring-bearer-box","Именная коробочка для колец","Свадьба",{"n":7339,"usd":42,"p25":19.25,"med":26.67,"p75":39.94,"vpd":6.5,"vpd90":59,"hot":35,"pers":90,"pod":22,"w":142,"wn":17,"bn":3,"bmed":65.0,"bvpd":2.6,"topmed":16.99}],
+["bridesmaid-robe","Халат невесты и подружек с вышивкой","Свадьба",{"n":52857,"usd":52,"p25":34.1,"med":50.8,"p75":89.0,"vpd":8.8,"vpd90":102,"hot":26,"pers":61,"pod":30,"w":369,"wn":14,"bn":17,"bmed":75.0,"bvpd":8.8,"topmed":45.0}],
+["custom-embroidered-denim-jacket","Джинсовая куртка с вышивкой","Вышивка и текстиль",{"n":3767,"usd":46,"p25":7.31,"med":41.11,"p75":75.0,"vpd":11.3,"vpd90":125,"hot":32,"pers":84,"pod":5,"w":454,"wn":13,"bn":12,"bmed":68.0,"bvpd":10.3,"topmed":42.22}],
+["custom-embroidered-hat","Вышитая кепка","Вышивка и текстиль",{"n":100179,"usd":62,"p25":17.0,"med":23.0,"p75":32.0,"vpd":14.2,"vpd90":150,"hot":43,"pers":90,"pod":9,"w":227,"wn":26,"bn":2,"bmed":61.0,"bvpd":67.3,"topmed":17.76}],
+["custom-embroidered-patches","Вышитые нашивки","Вышивка и текстиль",{"n":44566,"usd":72,"p25":6.65,"med":9.99,"p75":16.74,"vpd":2.4,"vpd90":138,"hot":27,"pers":64,"pod":1,"w":7,"wn":27,"bn":0,"bmed":null,"bvpd":null,"topmed":4.42}],
+["hand-embroidered-blouse","Блузка с ручной вышивкой","Вышивка и текстиль",{"n":9444,"usd":54,"p25":52.7,"med":87.0,"p75":139.75,"vpd":0.5,"vpd90":3,"hot":2,"pers":19,"pod":10,"w":454,"wn":33,"bn":6,"bmed":60.0,"bvpd":0.1,"topmed":45.74}],
+["linen-dress","Льняное платье","Вышивка и текстиль",{"n":116331,"usd":28,"p25":64.24,"med":116.0,"p75":165.74,"vpd":2.0,"vpd90":49,"hot":9,"pers":46,"pod":13,"w":595,"wn":5,"bn":6,"bmed":80.0,"bvpd":0.7,"topmed":107.0}],
+["personalized-silk-scarf","Именной шёлковый платок","Вышивка и текстиль",{"n":3015,"usd":41,"p25":16.85,"med":24.95,"p75":38.0,"vpd":4.0,"vpd90":134,"hot":22,"pers":81,"pod":49,"w":180,"wn":17,"bn":3,"bmed":54.0,"bvpd":10.9,"topmed":19.7}],
+["custom-name-necklace","Именное колье (серебро)","Украшения",{"n":159077,"usd":51,"p25":30.94,"med":37.8,"p75":52.97,"vpd":24.7,"vpd90":482,"hot":38,"pers":92,"pod":19,"w":113,"wn":17,"bn":8,"bmed":65.0,"bvpd":13.7,"topmed":35.0}],
+["silver-signet-ring","Серебряная печатка","Украшения",{"n":138456,"usd":87,"p25":79.8,"med":79.8,"p75":99.89,"vpd":0.2,"vpd90":3,"hot":6,"pers":19,"pod":11,"w":92,"wn":8,"bn":59,"bmed":80.0,"bvpd":0.1,"topmed":48.5}],
+["stone-chokers","Чокеры из натуральных камней (ваш срез 12.11)","Украшения",{"src":"s12","med":37.7}],
+["stone-bracelets","Браслеты из натуральных камней (ваш срез 12.11)","Украшения",{"src":"s12","med":24.6}],
+["custom-house-portrait","Акварельный портрет дома по фото","Искусство",{"n":22840,"usd":67,"p25":25.99,"med":35.0,"p75":55.0,"vpd":12.3,"vpd90":155,"hot":37,"pers":91,"pod":17,"w":454,"wn":23,"bn":19,"bmed":58.0,"bvpd":12.3,"topmed":33.32}],
+["wedding-venue-painting","Картина места свадьбы","Искусство",{"n":4689,"usd":30,"p25":17.9,"med":28.0,"p75":49.95,"vpd":8.8,"vpd90":112,"hot":33,"pers":84,"pod":9,"w":454,"wn":17,"bn":3,"bmed":68.0,"bvpd":28.6,"topmed":17.9}]
+];
+function $(id){return document.getElementById(id)}
+function num(id){var v=parseFloat(String($(id).value).replace(',','.'));return isFinite(v)?v:null}
+function fmt(x,d){if(x===null||x===undefined||!isFinite(x))return '—';var k=Math.pow(10,d==null?1:d);return (Math.round(x*k)/k).toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:d==null?1:d})}
+function cur(){var v=$('niche').value,i;for(i=0;i<NICHES.length;i++)if(NICHES[i][0]===v)return NICHES[i];return NICHES[0]}
+function fill(){
+  var sel=$('niche'),g='',h='',i;
+  for(i=0;i<NICHES.length;i++){
+    if(NICHES[i][2]!==g){if(g)h+='</optgroup>';g=NICHES[i][2];h+='<optgroup label="'+g+'">'}
+    h+='<option value="'+NICHES[i][0]+'">'+NICHES[i][1]+'</option>';
+  }
+  sel.innerHTML=h+'</optgroup>';
+}
+function nicheTable(){
+  var d=cur()[3],r=[];
+  function row(a,b,c){r.push('<tr><td>'+a+'</td><td>'+b+'</td><td class="l">'+(c||'')+'</td></tr>')}
+  if(d.src==='s12'){
+    row('Медиана цены предложений, $',fmt(d.med),'срез 12.11.2026, первая страница поиска Etsy, около 60 объявлений, включая рекламные');
+    row('Остальные показатели','—','<span class="st no">нет данных</span> срез по этой нише полного отчёта не делался: цена самого просматриваемого товара, просмотры, вес, доля персонализации, число листингов');
+  }else{
+    row('Листингов в нише на Etsy',fmt(d.n,0),'по запросу');
+    row('Цена, $: p25 / медиана / p75',fmt(d.p25)+' / '+fmt(d.med)+' / '+fmt(d.p75),'по '+d.usd+' листингам с ценой в USD (выборка свежих)');
+    row('Цена, $: медиана 5 самых просматриваемых листингов',fmt(d.topmed),'ближайший доступный признак «самого продаваемого»: Etsy не показывает продажи листинга, это просмотры в день за жизнь листинга');
+    row('В полосе $50–100: листингов / медиана цены, $',fmt(d.bn,0)+' / '+(d.bmed?fmt(d.bmed):'—'),'полоса, на которую ориентирован отчёт 06.11');
+    row('Просмотры в день: медиана / 90-й процентиль',fmt(d.vpd)+' / '+fmt(d.vpd90,0),'листингов с 10 и более просмотрами в день: '+d.hot);
+    row('Персонализация, % листингов',fmt(d.pers,0),'');
+    row('Производство у партнёров (не сам продавец), %',fmt(d.pod,0),'');
+    row('Вес в упаковке, г (медиана)',fmt(d.w,0),'по '+d.wn+' листингам с указанным весом');
+  }
+  $('nrows').innerHTML=r.join('');
+}
+function params(){
+  var rate=num('rate')||1.7;
+  return{rate:rate,tr:(num('f_tr')||0)/100,pr:(num('f_pr')||0)/100,cv:(num('f_cv')||0)/100,po:(num('f_po')||0)/100,
+    ads:(num('ads')||0)/100,fix:num('fix')||0,duty:num('duty')||0,tax:(num('tax')||0)/100,
+    c:[null,num('c1')||0,num('c2')||0,num('c3')||0,0],
+    m:[null,0,0,num('m3')||0,0],e:[null,num('e1')||0,num('e2')||0,num('e3')||0,num('e4')||0]};
+}
+function calc(){
+  var P=params(),pk=parseInt($('pack').value,10),R=num('retail'),M=num('master'),S=num('sales')||0,
+      sh=num('ship')||0,shc=num('shipc')||0,d=cur()[3];
+  var f=P.tr+P.pr+P.cv+P.po,cAz=P.c[pk],cUsd=cAz/P.rate;
+  var feesUsd=R===null?null:(R+sh)*f+R*P.ads+P.fix;
+  var ceilUsd=R===null?null:R+sh-feesUsd-shc-cUsd-P.duty;
+  var ceilAz=ceilUsd===null?null:ceilUsd*P.rate*(1-P.tax);
+  var den=1-f-P.ads;
+  var needUsd=(M===null||den<=0)?null:(M/(P.rate*(1-P.tax))-sh*(1-f)+P.fix+shc+cUsd+P.duty)/den;
+  var v=$('verdict');
+  if(ceilAz===null||M===null){v.className='verdict';v.textContent='Введите цену мастера и цену на Etsy.'}
+  else if(ceilAz>=M){v.className='verdict ok';v.textContent='Проходит: потолок '+fmt(ceilAz)+' ₼ не меньше цены мастера '+fmt(M)+' ₼.'}
+  else{v.className='verdict bad';v.textContent='Не проходит: потолок '+fmt(ceilAz)+' ₼ ниже цены мастера '+fmt(M)+' ₼. Нужна цена на Etsy от '+fmt(needUsd)+' $.'}
+  $('ceil').textContent=ceilAz===null?'—':fmt(ceilAz)+' ₼ ('+fmt(ceilAz/P.rate)+' $)';
+  $('gap').textContent=(ceilAz===null||M===null)?'—':fmt(ceilAz-M)+' ₼';
+  $('need').textContent=needUsd===null?'—':fmt(needUsd)+' $'+(d.med?' ('+(needUsd/d.med-1>=0?'+':'')+fmt((needUsd/d.med-1)*100,0)+' % к медиане ниши)':'');
+  $('comm').textContent=fmt(cAz)+' ₼'+(R?' ('+fmt(cUsd/R*100,0)+' % цены)':'');
+  $('fees').textContent=feesUsd===null?'—':fmt(feesUsd,2)+' $ ('+fmt(feesUsd/(R+sh||1)*100,0)+' % от суммы заказа)';
+  var names=['','1. Коллектив','2. Партнёрский','3. Без комиссии','4. Независимый'],tot=[],best=null,i,html='';
+  for(i=1;i<=4;i++){var t=P.e[i]+12*(P.m[i]+P.c[i]*S);tot.push(t);if(best===null||t<tot[best-1])best=i}
+  for(i=1;i<=4;i++){
+    var pay='—';
+    if(i===1)pay='база';
+    else{var dn=(P.c[1]-P.c[i])*S-P.m[i];pay=dn>0?fmt(P.e[i]/dn)+' мес.':'никогда'}
+    html+='<tr'+(i===best?' class="best"':'')+'><td>'+names[i]+'</td><td>'+fmt(P.e[i],0)+'</td><td>'+fmt(tot[i-1],0)+'</td><td>'+pay+'</td></tr>';
+  }
+  $('rows').innerHTML=html;
+  compare(R,d);
+}
+function compare(R,d){
+  var out=[],pv=$('pers').value,w=num('wt');
+  if(d.src==='s12'){
+    if(R!==null&&d.med)out.push('Цена на Etsy '+fmt(R)+' $ при медиане ниши '+fmt(d.med)+' $: '+(R/d.med>=1?'+':'')+fmt((R/d.med-1)*100,0)+' %.');
+    out.push('Других данных по этой нише нет: сравнить вес, персонализацию и цену лидеров нельзя.');
+  }else{
+    if(R!==null){
+      var pos=R<d.p25?'ниже нижней четверти (p25 '+fmt(d.p25)+' $)':R<=d.med?'между p25 и медианой':R<=d.p75?'между медианой и p75':'выше верхней четверти (p75 '+fmt(d.p75)+' $)';
+      out.push('Цена на Etsy '+fmt(R)+' $: '+pos+'; медиана ниши '+fmt(d.med)+' $ ('+(R/d.med>=1?'+':'')+fmt((R/d.med-1)*100,0)+' %); медиана 5 самых просматриваемых листингов '+fmt(d.topmed)+' $ ('+(R/d.topmed>=1?'+':'')+fmt((R/d.topmed-1)*100,0)+' %).');
+    }
+    if(pv!=='')out.push(pv==='1'?'Персонализация есть; в нише её предлагают '+d.pers+' % листингов.':'Персонализации нет; в нише её предлагают '+d.pers+' % листингов: товар может проигрывать по этому признаку.');
+    if(w!==null&&d.w)out.push('Вес '+fmt(w,0)+' г; медиана ниши '+fmt(d.w,0)+' г'+(w>d.w*1.5?': заметно тяжелее типичного, это влияет на доставку.':'.'));
+  }
+  $('cmp').innerHTML=out.length?out.join('<br>'):'Введите цену на Etsy, вес и признак персонализации, чтобы увидеть сравнение.';
+}
+function setRetail(){
+  var d=cur()[3];
+  $('retail').value=d.med?String(d.med):'';
+  $('retailhint').textContent=d.med?'Подставлена медиана ниши ('+fmt(d.med)+' $), измените на желаемую цену.':'';
+}
+function init(){
+  fill();setRetail();nicheTable();calc();
+  $('niche').addEventListener('change',function(){setRetail();nicheTable();calc()});
+  ['master','retail','pack','sales','ship','shipc','pers','wt','rate','f_tr','f_pr','fix','ads','f_cv','f_po','duty','tax','c1','c2','c3','m3','e1','e2','e3','e4'].forEach(function(id){
+    var el=$(id);el.addEventListener('input',calc);el.addEventListener('change',calc);
+  });
+}
+init();
+})();
+</script>
+</body>
+</html>
