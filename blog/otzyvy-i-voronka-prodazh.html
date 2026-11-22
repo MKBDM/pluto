@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Что показал разбор отзывов интернет-магазина и что исследовать дальше | Pluto Digital Lab</title>
+<meta name="description" content="Разбор отзывов и комментариев крупного бренда на открытых данных: что показали отзывы, к каким этапам воронки привязаны их темы и что менять первым.">
+<link rel="canonical" href="https://pluto.az/blog/otzyvy-i-voronka-prodazh.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pluto Digital Lab">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Что показал разбор отзывов интернет-магазина и что исследовать дальше | Pluto Digital Lab">
+<meta property="og:description" content="Разбор отзывов и комментариев крупного бренда на открытых данных: что показали отзывы, к каким этапам воронки привязаны их темы и что менять первым.">
+<meta property="og:url" content="https://pluto.az/blog/otzyvy-i-voronka-prodazh.html">
+<meta property="og:image" content="https://pluto.az/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/golos-text-cyrillic-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/fonts.css">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/pluto.css">
+<style>
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.phero h1{font-size:clamp(30px,5vw,46px)}
+.postwrap{display:grid;grid-template-columns:220px minmax(0,720px);gap:56px;justify-content:center;align-items:start}
+.toc{position:sticky;top:96px}
+.toc .mono{margin-bottom:10px}
+.toc a{display:block;padding:6px 12px;border-left:2px solid var(--ln);color:var(--gr);font-size:14px;line-height:1.35;text-decoration:none}
+.toc a:hover,.toc a:focus-visible{color:var(--iv2)}
+.toc a.on{color:var(--iv2);border-left-color:var(--ac2)}
+.tocm{display:none;margin:0 0 28px;border:1px solid var(--ln);border-radius:12px;padding:12px 16px;background:var(--card)}
+.tocm summary{cursor:pointer;font-size:15px;color:var(--iv2)}
+.tocm a{display:block;padding:8px 0;color:var(--iv);font-size:16px}
+.post{max-width:720px;margin:0}
+.post h2{font-size:28px;margin:44px 0 14px;color:var(--iv2);scroll-margin-top:96px}
+.post p,.post li{font-size:18px;line-height:1.65;color:var(--iv)}
+.post p{margin:0 0 16px}
+.post ul{list-style:disc;padding-left:22px;margin:12px 0}
+.post ol{list-style:decimal;padding-left:24px;margin:12px 0}
+.post li{margin:6px 0}
+.post a{color:var(--ac2);text-decoration:underline}
+.post .brief{margin:0 0 8px;padding:18px 22px;border:1px solid var(--ln);border-left:3px solid var(--ac2);border-radius:12px;background:var(--card);scroll-margin-top:96px}
+.post .brief h2{font-size:20px;margin:0 0 8px}
+.post .brief li{font-size:17px}
+.post table{width:100%;border-collapse:collapse;margin:20px 0;font-size:16px}
+.post th,.post td{border-bottom:1px solid var(--ln);padding:10px 8px;text-align:left;vertical-align:top}
+.post th{color:var(--iv2);font-weight:500}
+.post .cap{font-size:14px;color:var(--gr);margin:-8px 0 20px}
+.post .ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.post .ba div{border:1px solid var(--ln);border-radius:12px;padding:14px 16px;background:var(--card)}
+.post .ba b{display:block;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--gr);margin-bottom:6px;font-weight:500}
+.post .ba p{margin:0;font-size:16px}
+.post .quiz{margin:24px 0;padding:20px 22px;border:1px solid var(--ln);border-radius:14px;background:var(--card)}
+.post .quiz h3{margin:0 0 6px;color:var(--iv2);font-size:20px}
+.post .quiz .q{font-size:17px}
+.post .quiz button.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;font:inherit;font-size:17px;color:var(--iv);background:transparent;border:1px solid var(--ln);border-radius:10px;cursor:pointer}
+.post .quiz button.opt:hover,.post .quiz button.opt:focus-visible{border-color:var(--ac2)}
+.post .quiz button.opt[aria-pressed="true"]{border-color:var(--ac2);background:var(--card2)}
+.post .quiz .ans{margin-top:14px;padding:12px 14px;border-left:3px solid var(--ac2);font-size:16px;line-height:1.6;color:var(--iv)}
+.post .quiz .ans[hidden]{display:none}
+.post .src li{font-size:15px;color:var(--gr)}
+.post blockquote{margin:24px 0;padding:4px 0 4px 20px;border-left:3px solid var(--ac2)}
+.byline{color:var(--gr);font-size:15px;margin-top:14px}
+.byline a{color:inherit;text-decoration:underline}
+.postcta{margin-top:48px;padding:28px;border:1px solid var(--ln);border-radius:14px;background:var(--card)}
+.postcta h3{color:var(--iv2);margin:0 0 8px}
+.postnav{display:flex;justify-content:space-between;gap:16px;margin-top:32px;font-size:16px}
+@media (max-width:980px){.postwrap{display:block}.toc{display:none}.tocm{display:block}.post .ba{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Что показал разбор отзывов интернет-магазина и что исследовать дальше","description":"Разбор отзывов и комментариев крупного бренда на открытых данных: что показали отзывы, к каким этапам воронки привязаны их темы и что менять первым.","datePublished":"2026-11-21","dateModified":"2026-11-21","inLanguage":"ru","mainEntityOfPage":"https://pluto.az/blog/otzyvy-i-voronka-prodazh.html","image":"https://pluto.az/og-image.png","author":{"@type":"Person","name":"Мурад Кадымов","url":"https://pluto.az/about.html"},"publisher":{"@type":"Organization","name":"Pluto Digital Lab","url":"https://pluto.az/"}}
+</script>
+</head>
+<body>
+<div class="root dk" lang="ru">
+<header class="pnav"><a class="logo" href="/index.html" aria-label="Pluto Digital Lab"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="1"/><path d="M17 3A14 14 0 0 0 17 31A9 14 0 0 1 17 3Z" fill="currentColor"/></svg><span><b>PLUTO</b> DIGITAL LAB</span></a><input type="checkbox" id="nvt" class="nvt" aria-label="Меню"><nav class="links" aria-label="Main"><a href="/reviews.html">Анализ отзывов</a><a href="/research.html">Исследования</a><a href="/ecommerce.html">E-commerce</a><a href="/ai.html">ИИ-автоматизация</a><a href="/cases.html">Кейсы</a><a class="cur" href="/blog.html">Блог</a><a href="/about.html">Обо мне</a><a class="m-cta" href="/contact.html">Обсудить задачу ↗</a></nav><div class="r"><span class="lang">RU</span><button class="thm" type="button" data-theme-toggle aria-label="Переключить тему: тёмная / светлая" title="Тёмная / светлая тема"><span class="knob"></span><svg class="mo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="su" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><a class="pcta" href="/contact.html">Обсудить задачу ↗</a><label for="nvt" class="burger" aria-hidden="true"><i></i><i></i><i></i></label></div></header><section class="shell"><div class="phero"><a class="back" href="/blog.html">← Все статьи</a><p class="mono" style="color:#d9cfec;margin-top:18px">Анализ отзывов · <time datetime="2026-11-21">21 ноября 2026</time> · 6 мин чтения</p><h1>Что показал разбор отзывов интернет-магазина и что исследовать дальше</h1><p class="lead">Пример на открытых данных крупного бренда косметики и ухода в Азербайджане: что дали отзывы, как их темы привязаны к воронке продаж и какие исследования стоит провести следом.</p><p class="byline"><a href="/about.html">Мурад Кадымов</a> · Pluto Digital Lab</p></div></section><section class="wrap"><details class="tocm"><summary>Содержание</summary><a href="#brief">Коротко</a><a href="#data">Первый этап: что анализировали</a><a href="#rev">Что показал первый этап</a><a href="#next">Дополнительные исследования</a><a href="#plan">Ключевые выводы и что менять первым</a><a href="#bound">Ограничения разбора</a></details><div class="postwrap"><aside class="toc" aria-label="Содержание"><p class="mono">Содержание</p><nav><a href="#brief">Коротко</a><a href="#data">Первый этап: что анализировали</a><a href="#rev">Что показал первый этап</a><a href="#next">Дополнительные исследования</a><a href="#plan">Ключевые выводы и что менять первым</a><a href="#bound">Ограничения разбора</a></nav></aside><article class="post">
+<div class="brief" id="brief"><h2>Коротко</h2><ul>
+<li>Оценка почти не различает товары: <strong>отзывы почти все пятёрки, ценность в текстах</strong>.</li>
+<li>Тексты указывают на сервис после заказа, цену и недостаток информации о товаре. Это <strong>гипотезы, а не выводы</strong>: каждую пришлось проверить на данных другого этапа воронки.</li>
+<li>Проверка на комментариях, рекламе, профиле, акциях и мобильном сайте подтвердила большинство гипотез. Эффект от изменений ещё не измерен: первый шаг — четырёхнедельный тест.</li>
+</ul></div>
+
+<h2 id="data">Первый этап: что анализировали</h2>
+<p>Это разбор по открытым данным: бренд не назван, клиентом проекта в этой статье он не представлен. Отзывы выгружены с сайта магазина за 2024–2026 годы, остальные источники собраны с 1 сентября по 17 ноября 2026 года. На первом этапе мы анализировали отзывы на сайте и комментарии в Instagram: они показывали, где искать причину потерь. Остальные источники подключили позже, для проверки (см. раздел «Дополнительные исследования»).</p>
+<table><thead><tr><th>Источник</th><th>Что изучено</th></tr></thead><tbody>
+<tr><td>Отзывы на сайте</td><td>Оценки, тексты, причины низких оценок; около 330 опубликованных отзывов</td></tr>
+<tr><td>Комментарии в Instagram</td><td>Вопросы и жалобы покупателей, ответы бренда; несколько сотен комментариев</td></tr>
+</tbody></table>
+<p class="cap">Темы отзывов определены по ключевым словам на азербайджанском, русском и английском; подсчёт приблизителен. Отзывы с оценкой 1–3 разобраны вручную: у каждого одна главная причина.</p>
+
+<h2 id="rev">Что показал первый этап: отзывы и комментарии</h2>
+<ul>
+<li><strong>Звёзды ничего не различают.</strong> Средняя оценка около 4,7, подавляющее большинство отзывов — пятёрки. Динамика есть: в 2025 году средняя оценка снизилась с 4,9 до 4,6 (n = 115 и 130 отзывов за год), в 2026 году она около 4,7.</li>
+<li><strong>Недовольство в основном про сервис.</strong> Среди отзывов с оценкой 1–3 самая большая группа — заказ, связь и наличие: на сайте не отвечает номер, заказ не готов, оплату запросили дважды. Дальше по убыванию: слабый эффект или качество, стойкость аромата, нехватка информации о товаре. Аллергия, цена и малый объём встречаются единично.</li>
+<li><strong>Довольные хвалят аромат, увлажнение и подарки к заказу.</strong> Аромат и стойкость — самая частая тема. Часть довольных клиентов сама упоминает подарок или скидку: акция работает как причина купить.</li>
+<li><strong>Отзывов мало.</strong> Они есть лишь у небольшой части каталога, видимых ответов бренда нет.</li>
+<li><strong>Комментарии в Instagram:</strong> самая частая тема — вопрос о цене; вместе с просьбой «пришлите информацию» это основная часть комментариев покупателей. Бренд отвечает публично, но цены нет в самом посте, и вопрос приходится задавать под каждым постом.</li>
+</ul>
+<p>Оценку нельзя читать отдельно от текста: отзыв с пятью звёздами может содержать жалобу на неотвеченное сообщение. Поэтому тексты четырёх-пятизвёздочных отзывов с претензией мы читали отдельно.</p>
+<p><strong>Вывод первого этапа: отзывы и комментарии — хорошая точка входа, но не весь ответ.</strong> Отзывы оставляют в основном довольные, они есть лишь у части каталога, у них нет источника клиента, и они не показывают потери до заказа. Поэтому темы мы проверили на других этапах. О том, как читать такие данные без ложной точности, см. статью <a href="/blog/37-iz-100.html">«37 из 100» в отчёте по отзывам</a>.</p>
+
+<h2 id="next">Дополнительные исследования</h2>
+<p>Тема из отзывов остаётся гипотезой, пока её не проверили на данных соответствующего этапа. Мы привязали каждую тему к этапу и проверили.</p>
+<table><thead><tr><th>Тема в отзывах</th><th>Этап воронки</th><th>Чем проверили</th><th>Итог</th></tr></thead><tbody>
+<tr><td>Связь и заказ</td><td>После заказа</td><td>Комментарии в Instagram, обращение в WhatsApp</td><td>Подтвердилось</td></tr>
+<tr><td>Нет информации о товаре</td><td>Карточка товара</td><td>Проверка мобильного сайта</td><td>Подтвердилось</td></tr>
+<tr><td>Цена и акции</td><td>Акции, посты, реклама</td><td>Акции, посты, объявления, комментарии с вопросом о цене</td><td>Подтвердилось</td></tr>
+<tr><td>Доставка и оформление</td><td>Корзина и оформление</td><td>Проверка корзины в два дня</td><td>Подтвердилось частично</td></tr>
+<tr><td>Стойкость аромата, аллергия</td><td>Реклама, состав на карточке</td><td>Не проверяли</td><td>Следующий этап</td></tr>
+</tbody></table>
+<p class="cap">«Подтвердилось» значит: проблема из отзыва найдена на соответствующем этапе. Это не доказывает, что она снижает продажи.</p>
+
+<p>Чтобы проверить гипотезы из отзывов и комментариев, мы изучили ещё пять источников.</p>
+<table><thead><tr><th>Источник</th><th>Что изучено</th></tr></thead><tbody>
+<tr><td>Реклама Meta</td><td>Куда ведёт клик и что обещает объявление: все активные объявления на 16 ноября</td></tr>
+<tr><td>Профиль и лента Instagram</td><td>Шапка, ссылки, подборки, темы постов за три месяца</td></tr>
+<tr><td>Акции и посты</td><td>Механика, сроки, чек-лист поста, календарь акций</td></tr>
+<tr><td>Мобильный сайт</td><td>Путь от главной до оформления заказа, экспертная оценка</td></tr>
+<tr><td>Консультация и сервис</td><td>Одно обращение в WhatsApp, связь после заказа</td></tr>
+</tbody></table>
+<p><strong>Что нашли:</strong></p>
+<ul>
+<li><strong>Реклама:</strong> на 16 ноября было 11 активных объявлений, на страницу товара вело одно, остальные — на общую страницу акций или главную.</li>
+<li><strong>Профиль:</strong> нет пути к покупке: первая ссылка ведёт на главную, нет закрепа «как заказать» и подборки с актуальной акцией.</li>
+<li><strong>Акции:</strong> за три месяца семнадцать акций, у большинства нет даты окончания, одновременно действуют несколько предложений. Условия в посте, рекламе и на сайте расходятся.</li>
+<li><strong>Мобильный сайт:</strong> около двадцати пяти замечаний на пути, шесть критичных (экспертная оценка): цена и кнопка ниже экрана, подарки в корзине выше купленного товара, разные пороги бесплатной доставки. В одном случае набор «со скидкой» оказался почти равен цене товаров по отдельности.</li>
+<li><strong>Сервис:</strong> жалобы на недозвон и неприходящие SMS; на просьбу подобрать подарок в WhatsApp пришла ссылка на общий поиск.</li>
+</ul>
+
+<h2 id="plan">Ключевые выводы и что менять первым</h2>
+<ul>
+<li>Оценки почти не различают товары, ценность в текстах отзывов и комментариев.</li>
+<li>Главные темы — сервис после заказа, цена и акции, недостаток информации о товаре. Большинство из них подтвердилось на других этапах воронки.</li>
+<li>Путь к покупке неочевиден: из 11 активных объявлений на страницу товара вело одно, в профиле нет ссылки на заказ, условия акций расходятся.</li>
+<li>Стойкость аромата и аллергию мы не проверяли, это следующий этап. Эффект от изменений не измерен.</li>
+</ul>
+<p>Мы предложили семь изменений по приоритету. Приоритет — экспертная оценка: близость к заказу и число затронутых покупателей. Первые два шага затрагивают каждого покупателя и не требуют разработки.</p>
+<ol>
+<li>Календарь акций: одно главное предложение на период, даты начала и конца.</li>
+<li>Реклама и посты ведут на страницу товара или акции.</li>
+<li>В посте: товар, цена, срок акции.</li>
+<li>Профиль: ссылка на заказ, свежие закрепы и подборки.</li>
+<li>Ответ на вопрос о заказе в течение дня.</li>
+<li>Запрос отзыва после доставки, ответы на низкие оценки.</li>
+<li>Сайт: цена и кнопка на первом экране, единые условия акции.</li>
+</ol>
+<p>Проверка занимает четыре недели и идёт по очереди, чтобы видеть эффект каждого изменения: подготовка и фиксация текущих заказов, тест ссылки в одном ролике, тест одной акции вместо нескольких, затем решение по оплаченным заказам, выручке на визит и стоимости заказа. Критерий успеха задаётся до старта. <strong>Ожидаемый эффект — экспертная оценка, подтверждается только результатами теста.</strong></p>
+
+<h2 id="bound">Ограничения разбора</h2>
+<ul>
+<li>Данные открытые: нет заказов, выручки, Instagram Insights, рекламного кабинета и веб-аналитики, поэтому потери нельзя выразить в деньгах.</li>
+<li>Темы отзывов определены по ключевым словам, подсчёт приблизителен; низкие оценки разобраны вручную на небольшом числе отзывов, выводы ориентировочные.</li>
+<li>Оценка мобильного сайта и понятности постов экспертная и не измеряет продажи.</li>
+<li>Состояние страниц, акций и рекламы относится к 16–17 ноября 2026 года и могло измениться.</li>
+</ul>
+<p>Следующий этап — внутренние данные: Instagram Insights, рекламный кабинет, аналитика сайта, заказы по акциям, обращения в мессенджеры и интервью с покупателями.</p>
+<div class="postcta"><h3>Есть отзывы, с которыми не знаете, что делать?</h3><p>Оценка данных бесплатна: посмотрю, что в них можно найти. Принимаю материалы на русском, азербайджанском и английском.</p><a class="btn red" href="/reviews.html">Обсудить разбор отзывов ↗</a></div>
+<p class="postnav"><a href="/blog.html">← Все статьи</a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">Обсудить в LinkedIn ↗</a></p>
+</article></div></section>
+<section class="cta2"><div><p class="mono" style="color:#e3d6ff">Контакты</p><h2>Какое решение вам нужно принять?</h2><p class="about">Расскажите, что происходит в продукте или бизнесе. На бесплатном 30-минутном созвоне обсудим, с чего начать.</p><a class="btn red" href="/contact.html">Обсудить задачу ↗</a></div><div><p class="mono" style="color:#e3d6ff;margin-bottom:10px">Или напишите напрямую</p><div class="cl"><a href="https://t.me/mkbdm" target="_blank" rel="noopener">Telegram <span>↗</span></a><a href="https://wa.me/994504212641" target="_blank" rel="noopener">WhatsApp <span>↗</span></a><a href="mailto:muradkadimov@pluto.az">Email <span>↗</span></a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">LinkedIn <span>↗</span></a></div></div></section><footer class="ft"><div class="c"><b>PLUTO DIGITAL LAB</b><span>Независимая практика</span><span style="margin-top:14px">© 2026 Pluto Digital Lab · <a href="/privacy.html" style="text-decoration:underline">Политика конфиденциальности</a></span></div><div class="c"><span class="h">Разделы</span><a href="/reviews.html">Анализ отзывов</a><a href="/research.html">Исследования</a><a href="/ecommerce.html">E-commerce</a><a href="/ai.html">ИИ-автоматизация</a><a href="/cases.html">Кейсы</a><a href="/blog.html">Блог</a><a href="/about.html">Обо мне</a></div><div class="c"><span class="h">Связь</span><a href="https://t.me/mkbdm" target="_blank" rel="noopener">Telegram</a><a href="https://wa.me/994504212641" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:muradkadimov@pluto.az">muradkadimov@pluto.az</a><a href="https://www.linkedin.com/in/muradkadimov/" target="_blank" rel="noopener">LinkedIn</a></div></footer>
+</div>
+<script src="/js/site.js"></script>
+<script src="/js/consent.js"></script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  var ids=Object.keys(map);
+  function mark(id){links.forEach(function(a){a.classList.remove('on');a.removeAttribute('aria-current');});if(map[id]){map[id].classList.add('on');map[id].setAttribute('aria-current','true');}}
+  if('IntersectionObserver' in window){
+    var seen={};
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){seen[e.target.id]=e.isIntersecting;});
+      for(var i=0;i<ids.length;i++){if(seen[ids[i]]){mark(ids[i]);return;}}
+    },{rootMargin:'-15% 0px -70% 0px'});
+    ids.forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});
+  }
+  mark(ids[0]);
+  var tm=document.querySelector('.tocm');
+  if(tm){[].slice.call(tm.querySelectorAll('a')).forEach(function(a){a.addEventListener('click',function(){tm.open=false;});});}
+  var texts={
+    a:'Так читают оценку, а не текст. Оценка отвечает, доволен ли автор в целом, но жалоба на сервис при этом пропадает из разбора. Для вывода «что исправлять» этого мало.',
+    b:'Это подходящий вариант для задачи «что исправлять»: тема записывается по тексту (сервис после заказа), а оценка остаётся отдельным полем. Тогда видно, что довольный клиент всё равно столкнулся с проблемой.',
+    c:'Отзыв не надо выбрасывать. Расхождение оценки и текста само сигнал: клиент доволен товаром, но недоволен сервисом. Исключать такой отзыв значит потерять самый информативный случай.'
+  };
+  var box=document.getElementById('ans');
+  var btns=[].slice.call(document.querySelectorAll('#quiz .opt'));
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    box.textContent=texts[b.getAttribute('data-k')];box.hidden=false;
+  });});
+})();
+</script>
+</body>
+</html>
